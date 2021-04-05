@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Search</title>
+        <link rel="stylesheet" href="../css/style.css">
+    </head>
+    <body>
+        <div style="background-color: gainsboro; background-size: cover; height: 60px; margin-top: -10px; margin-left: -10px; margin-right: -10px;">
+            <div style="text-align: left; font-size: 30px; position: relative; top: 13px; left: 20px">
+                <span class="GGblue">G</span><span class="GGred">o</span><span class="GGyellow">o</span><span class="GGblue">g</span><span class="GGgreen">l</span><span class="GGred">e</span>
+            </div>
+            <div id="mode_switch" style="position: relative; right:20px; bottom:10px">
+                <a href="../index.html">Google Search</a>
+            </div>
+        </div>
+        <!-- <div style="text-align: left; font-size: 30px; margin-left: 10px; margin-top: 10px">
+            <span class="GGblue">G</span><span class="GGred">o</span><span class="GGyellow">o</span><span class="GGblue">g</span><span class="GGgreen">l</span><span class="GGred">e</span>
+        </div> -->
+        <br><form action="https://google.com/search">
+            <div style="margin-left: 30px;">
+                <div class="GGred" style="font-size: larger; margin-bottom: 20px;">
+                    Advanced Search
+                </div>
+                <hr style="margin-left: -40px; margin-right: -40px; background-color: #DDD; border:none; height:1px">
+                <div style="font-size: large; margin-top: 20px">
+                    Find pages with...
+                </div>
+                <br> <div class="adv_options">
+                    all these words:
+                    <input style="margin-left: 100px;" type="text" name="as_q">
+                </div>
+                <div class="adv_options">
+                    <br> this exact word or phrase:
+                    <input style="margin-left: 28px;" class="adv_options" type="text" name="as_epq">   
+                </div>
+                <div class="adv_options">
+                    <br> any of these words:
+                    <input style="margin-left: 72px;" class="adv_options" type="text" name="as_oq">
+                </div>
+                <div class="adv_options">
+                    <br> none of these words:
+                    <input style="margin-left: 62px;" class="adv_options" type="text" name="as_eq">
+                </div>
+                <br> <input class="google_button" style="position:relative; left:400px;" type="submit" value="Advanced Search">
+            </div>
+        </form>
+    </body>
+</html>
