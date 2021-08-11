@@ -1,0 +1,10 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Create Error
+{% endblock %}
+
+{% block body %}
+    <h2>Error: The input title already exists.</h2>
+    <a href="{% url 'entry' title=title %}">{{ title }}</a>
+{% endblock %}
