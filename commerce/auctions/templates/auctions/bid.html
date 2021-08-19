@@ -1,0 +1,19 @@
+{% include 'auctions/listing_layout.html' %}
+
+<h2>Bid your price</h2>
+
+{% if message %}
+    <strong>{{ message }}</strong>
+{% endif %}
+
+<form action="{% url 'auctions:bid' listing_id=request_listing.id %}" method="post">
+    {% csrf_token %}
+    <p>
+        <label for="bid_price">Bidding Price</label>
+        <input id="bid_price", type="number", name="bid_price">
+    </p>
+    
+    <p class = "submit_bid">
+        <input type="submit", value="Bid">
+    </p>
+</form>

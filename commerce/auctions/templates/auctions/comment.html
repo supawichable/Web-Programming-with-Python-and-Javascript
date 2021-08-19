@@ -1,0 +1,12 @@
+{% include 'auctions/listing_layout.html' %}
+{% include 'auctions/comment_form_layout.html' %}
+<hr>
+<p>
+    <h2>Add your comment</h2>
+    <form action="{% url 'auctions:comment' listing_id=request_listing.id %}" method="post">
+        {% csrf_token %}
+        <input id="comment", type="text", name="comment">
+        <br><br>
+        <input class="submit" type="submit" value="submit">
+    </form>
+</p>

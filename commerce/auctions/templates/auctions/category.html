@@ -1,0 +1,8 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ category_name }}</h2>
+    {% for listing in listing_in_cat %}
+        {% include 'auctions/small_listing_layout.html' with active_list=True %}
+    {% endfor %}
+{% endblock %}

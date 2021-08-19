@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% for listing in listings %}
+        {% if listing.status %}
+            {% include "auctions/small_listing_layout.html" with active_list=True %}
+        {% endif %}
+    {% empty %}
+        No listing yet.
+    {% endfor %}
+{% endblock %}

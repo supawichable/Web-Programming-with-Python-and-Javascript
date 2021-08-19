@@ -1,0 +1,8 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>My Bids</h2>
+    {% for listing, bid in bids.items %}
+        {% include 'auctions/small_listing_layout.html' with bid_price=bid.bid_price status=listing.status %}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,4 @@
+<h2>Comments</h2>
+{% for comment in request_listing.commenting.all %}
+    {{comment.commentator}}: {{ comment.comment_text }} <br>
+{% endfor %}

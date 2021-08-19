@@ -1,0 +1,29 @@
+<p>
+    <h3><a href="{% url 'auctions:listing' listing_id=listing.id %}">{{ listing.title }}</a></h3>
+    
+    {{listing.description}} <br>
+    
+    Current bidding price: <strong>
+        {% if listing.max_bid_price == 0%}
+            start bidding at {{ listing.start_price }}
+        {% else %}
+            {{ listing.max_bid_price }}
+        {% endif %}
+    </strong> <br>
+
+    {% if bid_price %}
+        Your highest bid price: <strong>{{ bid_price }}</strong><br>
+    {% endif %}
+
+    {% if not active_list %}
+        {% if status %}
+            Status: <strong>Active</strong>
+        {% else %}
+            Status: <strong>Bidding Closed</strong> 
+        {% endif %} <br>
+    {% endif %} <br>
+
+    {% if listing.url %}
+        <img class="active_listing_pic" src="{{ listing.url }}">
+    {% endif %}
+</p><hr>

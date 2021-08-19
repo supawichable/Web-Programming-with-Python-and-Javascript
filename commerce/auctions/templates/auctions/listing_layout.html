@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if user == request_listing.winner %}
+        <h3> Congratulations! You've won this bid. </h3>
+    {% endif %}
+
+    {% if watchlist_message %}
+        <h3>{{ watchlist_message }}</h3>
+    {% endif %}
+
+    <h2>{{ request_listing.title }}</h2>
+
+    {{ request_listing.description }} <br>
+
+    {% if request_listing.url %}
+        <img class="item_pic" src={{ request_listing.url }} > <br><br>
+    {% endif %}
+
+    <hr>
+    Starting Bid: {{ request_listing.start_price }} <br>
+    <p class="price">
+        Highest Bidding Price: 
+        {% if request_listing.max_bid_price != 0 %}
+            {{ request_listing.max_bid_price }}
+        {% else %}
+            No bidding yet.
+        {% endif %} <br>
+    </p>
+
+    <p > Status:
+    {% if request_listing.status %}
+        Active
+    {% else %}
+        Bidding closed
+    {% endif %} <br>
+
+    Listed by: {{ request_listing.lister }}<br>
+    <hr>
+
+{% endblock %}

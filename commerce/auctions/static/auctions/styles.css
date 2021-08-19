@@ -1,0 +1,35 @@
+body {
+    padding: 20px;
+}
+
+form  {display: table; border-collapse: separate; border-spacing: 0 15px;}
+p     {display: table-row;}
+label {display: table-cell; width:40%;}
+input {display: table-cell; width:250%;}
+
+.description input {
+    height: 200px;
+}
+
+.submit{
+    width: 100%;
+}
+
+.price{
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.item_pic{
+    width: 40%;
+    height: 40%;
+}   
+
+.active_listing_pic{
+    width: 30%;
+    height: 30%;
+}
+
+.button{
+    font-size:x-large;
+}

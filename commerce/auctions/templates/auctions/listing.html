@@ -1,0 +1,25 @@
+{% include 'auctions/listing_layout.html' %}
+
+<div class="button">
+    {% if request_listing.status %}
+        {% if user.is_authenticated and user == request_listing.lister %}
+            <a href="{% url 'auctions:close' listing_id=request_listing.id %}">Close Bidding</a>
+        {% else %}
+            <a href="{% url 'auctions:bid' listing_id=request_listing.id %}">Bid</a>
+        {% endif %}
+    {% endif %}
+    &nbsp; &nbsp;
+    <a href="{% url 'auctions:comment' listing_id=request_listing.id %}">Comment</a>
+    &nbsp; &nbsp;
+
+    {% if user != request_listing.lister %}
+        {% if user in request_listing.watched_by.all %}
+            <a href="{% url 'auctions:remove_watchlist' listing_id=request_listing.id %}">Remove from Watchlist</a>
+        {% else %}
+            <a href="{% url 'auctions:add_watchlist' listing_id=request_listing.id %}">Add to Watchlist</a>
+        {% endif %}
+    {% endif %}
+</div>
+<hr>
+
+{% include 'auctions/comment_form_layout.html' %}

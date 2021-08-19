@@ -1,0 +1,8 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>My Listings</h2>
+    {% for listing in user.listed.all %}
+        {% include "auctions/small_listing_layout.html" with status=listing.status %}
+    {% endfor %}
+{% endblock %}
