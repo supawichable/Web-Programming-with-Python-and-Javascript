@@ -1,0 +1,46 @@
+textarea {
+    min-height: 400px;
+}
+
+div_email {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 8px;
+    padding-left: 20px;
+    width: 100%;
+    max-inline-size: 15cm;
+    border: 1.5px;
+    margin: 5px;
+}
+
+#mark_as, #archive, #reply {
+    display: inline-block;
+    position: relative;
+} 
+
+#archive {
+    right: 0.5%;
+}
+
+#reply {
+    right: 1.0%;
+}
+
+#email-view {
+    margin: 15px;
+}
+
+.read {
+    box-shadow: 2px 2px 4px gray;
+    background-color: lightgray;
+}
+
+.not_read {
+    box-shadow: 2px 2px 4px gray;
+    background-color: white;
+} 
+
+.span_subject {
+    font-size: larger;
+    font-weight: bold;
+}
