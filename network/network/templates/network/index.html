@@ -1,0 +1,34 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>All Posts</h2>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <button class="btn btn-outline-primary" id="newpost-btn">▼ New Post</button>
+    {% include "network/addpost.html" %}
+
+    {% for post in page_obj %}
+        {% include "network/postblock.html" with post=post %}
+
+        <div class="commentblock" id="commentblock-{{post.id}}">
+            <div class="showcomment">
+                {% include "network/addcomment.html" %}
+                {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
+                    <hr>
+                    {% include "network/commentblock.html" with comment=comment %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+
+    {% include "network/pagination.html" with post_obj=post_obj %}
+    
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}

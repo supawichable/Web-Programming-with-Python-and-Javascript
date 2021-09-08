@@ -1,0 +1,8 @@
+<div class="postblock" id="newpost">
+    <form class="form-group form-newpost" action="{% url 'index' %}" method="post">
+        <h3>New Post</h3>
+        {% csrf_token %}
+        <textarea class="form-control form-newpost-text" name="post_text" rows="4"></textarea>
+        <input class="btn btn-primary form-newpost-submit" type="submit" value="Post">
+    </form>
+</div> 

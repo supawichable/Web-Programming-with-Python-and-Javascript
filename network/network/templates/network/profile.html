@@ -1,0 +1,17 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h2 class="profile-display-name">{{ profile.display_name }}</h2>
+    <div class="username">{{ profile.username }}</div>
+    {% if profile != request.user %}
+        <button class="btn btn-outline-primary follow-btn">Follow</button>
+    {% endif %} <br>
+    <strong>{{ profile.followings.count }}</strong> followings
+    <strong>{{ profile.followers.count }}</strong> followers
+
+    {% for post in profile.posted.all %}
+        {% include "network/postblock.html" with post=post %}
+    {% endfor %}
+
+    {% include "network/pagination.html" with page_obj=page_obj%}
+{% endblock %}

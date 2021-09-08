@@ -1,0 +1,18 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h2>Following</h2>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <button class="btn btn-outline-primary newpost-btn">New Post</button>
+    {% include "network/addpost.html" %}
+
+    {% for post in page_obj %}
+        {% include "network/postblock.html" with post=post %}
+    {% endfor %}
+
+    {% include "network/pagination.html" with page_obj=page_obj%}
+    
+{% endblock %}
