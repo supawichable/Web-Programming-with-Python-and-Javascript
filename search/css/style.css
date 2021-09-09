@@ -2,18 +2,12 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* h1{
-    font-size: 80px;
-    margin-bottom: -12px;
-} */
-
 #mode_switch{
     font-size: small;
     text-align: right;
 }
 
 #mode_switch a{
-    /* font-family: Arial, Helvetica, sans-serif; */
     color:dimgray;
     text-decoration: none;
 }
@@ -85,7 +79,3 @@
 .google_button_gray:hover{
     border-color:#AAA;
 }
-/* #submit_button{
-    padding: 5px;
-    width: 100px
-} */
