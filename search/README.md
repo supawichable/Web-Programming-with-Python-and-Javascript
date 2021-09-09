@@ -19,9 +19,12 @@ To set up this project:
 ![google-search](media/README_media/google_search.gif)
 
 #### Image Search
+![image-search](media/README_media/image_search.gif)
 
 #### Advanced Search
+![advanced-search](media/README_media/advanced_search.gif)
 
 #### I'm Feeling Lucky
+![lucky](media/README_media/lucky.gif)
 
 ## Implementation
