@@ -16,7 +16,7 @@ To set up this project:
 
 ### Preview
 #### Google Search
-![google-search](google_search.gif)
+![google-search](media/README_media/google_search.gif)
 
 #### Image Search
 
