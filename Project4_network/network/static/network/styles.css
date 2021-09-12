@@ -1,115 +1,112 @@
-body{
-    font-family:Arial, Helvetica, sans-serif;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 h2 {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .body {
-    margin: 30px;
+  margin: 30px;
 }
 
 .postblock {
-    border-radius: 10px;
-    border-style: solid;
-    border-width: 0.5px;
-    margin: 15px;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 0.5px;
+  margin: 15px;
 }
 
 .commentblock {
-    border-radius: 10px;
-    border-style: solid;
-    border-width: 0.5px;
-    margin: 15px;
-    margin-left: 50px;
-    margin-top: -10px;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 0.5px;
+  margin: 15px;
+  margin-left: 50px;
+  margin-top: -10px;
 }
 
 .text {
-    margin-top: 3px;
-    margin-bottom: 3px;
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
 
 .timestamp {
-    font-size: small;
-    margin-bottom: 5px;
+  font-size: small;
+  margin-bottom: 5px;
 }
 
 .form-newpost {
-    margin: 20px;
+  margin: 20px;
 }
 
 .form-newpost-text {
-    height: 3cm;
-    /* width: 50%; */
-    resize:horizontal;
-    margin-bottom: 8px;
-    margin-top: 8px;
+  height: 3cm;
+  /* width: 50%; */
+  resize: horizontal;
+  margin-bottom: 8px;
+  margin-top: 8px;
 }
 
 .display_name {
-    font-weight: bold;
-    font-size: large;
-    display:inline;
+  font-weight: bold;
+  font-size: large;
+  display: inline;
 }
 
 .username {
-    color:gray;
-    display:inline;
+  color: gray;
+  display: inline;
 }
 
 .showpost {
-    margin: 20px;
+  margin: 20px;
 }
 
-.showcomment{
-    margin: 20px;
+.showcomment {
+  margin: 20px;
 }
 
 .like-comment-edit-btn {
-    display: inline;
-    margin-top: 5px;
-    /* display: inline-block; */
-    /* vertical-align: top; */
+  display: grid;
+  margin-top: 5px;
+  grid-template-columns: auto auto 1fr;
+  grid-column-gap: 0.25em;
+}
+.like-comment-edit-btn .edit-btn {
+  justify-self: end;
 }
 
 .form-newcomment-submit {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .editing-btns {
-    margin-top: 5px;
-    margin-bottom: -10px;
+  margin-top: 5px;
+  margin-bottom: -10px;
 }
 
 .follow-btn {
-    position:relative;
-    left:1%;
+  position: relative;
+  left: 1%;
 }
 
 .profile-display-name {
-    margin-bottom: -3px;
-}
-
-.edit-btn {
-    float: right;
+  margin-bottom: -3px;
 }
 
 .post-edit-cancel-btn {
-    float: right;
-    margin-right: 5px;
+  float: right;
+  margin-right: 5px;
 }
 
 .post-edit-submit-btn {
-    float: right;
+  float: right;
 }
-
-/* .like-comment-edit-btn {
-    overflow: hidden;
-} */
 
 #newpost-btn {
-    margin-bottom: 10px;
-    margin-top: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
+
+/*# sourceMappingURL=styles.css.map */

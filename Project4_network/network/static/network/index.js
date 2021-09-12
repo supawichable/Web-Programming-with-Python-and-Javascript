@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('click', event => {
     
     const element = event.target;
-    // console.log(element.className)
 
     // show or hide section for adding a new post
     if (element.id === 'newpost-btn'){
@@ -116,7 +115,6 @@ document.addEventListener('click', event => {
             type = "post";
         }
 
-        // element.className = `btn btn-sm btn-primary ${type}-edit-btn edit-btn`;
         element.style.display = "none";
 
         const hides = document.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
@@ -124,28 +122,6 @@ document.addEventListener('click', event => {
 
         const show  = document.querySelector(`.${type}-show-when-edit-${element_id}`);
         show.style.display = "block";
-        // shows.forEach(show => {show.style.display = "block"});
-
-        // const btns = document.getElementById(`${type}-btns-${element_id}`);
-        // const cancel_btn = document.createElement('button');
-        // cancel_btn.className = "btn btn-sm btn-outline-primary edit-cancel-btn";
-        // cancel_btn.id = `${type}-cancel-btn-${element_id}`;
-        // cancel_btn.innerHTML = "Cancel";
-        // btns.append(cancel_btn);
-
-        // const edittext = document.getElementById(`${type}-edittext-${element_id}`);
-        // const editarea = document.createElement('textarea');
-        // editarea.className = `form-control form-edit${type}-text`;
-        // editarea.rows = row_number;
-        // editarea.innerHTML = document.getElementById(`${type}-text-${element_id}`).innerHTML.trim();
-        // edittext.append(editarea);
-
-        // const editsubmit = document.getElementById(`${type}-edit-submit-${element_id}`);
-        // const submit_btn = document.createElement('button');
-        // submit_btn.className = `btn btn-sm btn-primary edit-submit-btn ${type}-edit-submit-btn`;
-        // submit_btn.id = `${type}-edit-submit-btn-${element_id}`;
-        // submit_btn.innerHTML = "Submit";
-        // editsubmit.append(submit_btn);
     }
 
     if (element.classList.contains('edit-cancel-btn')) {
@@ -163,47 +139,7 @@ document.addEventListener('click', event => {
 
         const shows = document.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
         shows.forEach(hide => {hide.style.display = "block"});
-        // comment_btn.style.display = "block";
-
-        // const edit_btn = document.getElementById(`${type}-edit-btn-${element_id}`);
-        // const like_comment_edit_btn = document.getElementById(`comment-btns-${element_id}`);
-        // like_comment_edit_btn.append(edit_btn);
-        
-        // edit_btn.style.display = "block";
     }
-    // if (element.classList.contains("edit-submit-btn")) {
-    //     var element_id, type;
-    //     if (element.classList.contains("comment-edit-submit-btn")){
-    //         element_id = parseInt(element.id.substring(24));
-    //         type = "comment";
-    //     } else {
-    //         element_id = parseInt(element.id.substring(21));
-    //         type = "post";
-    //     }
-
-    //     console.log(element_id);
-
-    //     const element_text = document.getElementById(`${type}-edittext-${element_id}`);
-    //     console.log("value: ", element_text.value);
-        
-    //     fetch(`/${type}_interact/${element_id}`, {
-    //         method: 'PUT',
-    //         body: JSON.stringify({
-    //             edittext: element_text.value
-    //         })
-    //     });
-
-    //     // const btns = document.getElementById(`${type}-btns-${element_id}`);
-    //     // btns.style.display = "block";
-    //     show_updated_text(element_id, type);
-
-    //     const edittext = document.getElementById(`${type}-edittext-${element_id}`);
-    //     edittext.style.display = "none";
-    //     const editsubmit = document.getElementById(`${type}-edit-submit-${element_id}`);
-    //     editsubmit.style.display = "none";
-    //     const editcancel = document.getElementById(`${type}-cancel-btn-${element_id}`);
-    //     editcancel.style.display = "none";
-    // }
 })
 
 

@@ -30,6 +30,7 @@
         {% csrf_token %}
         <button class="btn btn-sm btn-outline-primary comment-like-btn like-btn comment-hide-when-edit-{{comment.id}}" id="comment-like-btn-{{comment.id}}">Like</button>
         {% if comment.owner == request.user %}
+            <div></div> 
             <button class="btn btn-sm btn-outline-primary comment-edit-btn edit-btn comment-hide-when-edit-{{comment.id}}" id="comment-edit-btn-{{comment.id}}">Edit</button>
         {% endif %}
     </div>

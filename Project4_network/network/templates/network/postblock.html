@@ -27,7 +27,7 @@
 
         <div class="like-comment-edit-btn" id="post-btns-{{post.id}}">
             {% csrf_token %}
-            <button class="btn btn-sm btn-outline-primary like-btn post-hide-when-edit-{{post.id}}" id="like-btn-{{post.id}}">Like</button>
+            <button class="btn btn-sm btn-outline-primary like-btn" id="like-btn-{{post.id}}">Like</button>
             <button class="btn btn-sm btn-outline-primary comment-btn" id="comment-btn-{{post.id}}">▼ Comment</button>
             {% if post.owner == request.user %}
                 <button class="btn btn-sm btn-outline-primary edit-btn post-hide-when-edit-{{post.id}}" id="edit-btn-{{post.id}}">Edit</button>
