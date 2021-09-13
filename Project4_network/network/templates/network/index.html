@@ -11,15 +11,19 @@
     {% include "network/addpost.html" %}
 
     {% for post in page_obj %}
-        {% include "network/postblock.html" with post=post %}
+        <div class="postwrap">
+            {% include "network/postblock.html" with post=post %}
 
-        <div class="commentblock" id="commentblock-{{post.id}}">
-            <div class="showcomment">
-                {% include "network/addcomment.html" %}
-                {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
-                    <hr>
-                    {% include "network/commentblock.html" with comment=comment %}
-                {% endfor %}
+            <div class="commentblock" id="commentblock-{{post.id}}">
+                <div class="showcomment">
+                    {% include "network/addcomment.html" %}
+                    {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
+                        <span class="commentwrap">
+                            <hr>
+                            {% include "network/commentblock.html" with comment=comment %}
+                        </span>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     {% endfor %}
@@ -30,5 +34,9 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'network/index.js' %}"></script>
+    <script src="{% static 'network/util_functions.js' %}"></script> 
+    <script src="{% static 'network/newpost_functions.js' %}"></script> 
+    <script src="{% static 'network/post_functions.js' %}"></script>
+    <script src="{% static 'network/comment_functions.js' %}"></script>
+    <script src="{% static 'network/authenticated.js' %}"></script>
 {% endblock %}

@@ -78,6 +78,16 @@ h2 {
     } 
 }
 
+.follow-btn {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    position:relative;
+    left:1%;
+    margin-bottom: 5px;
+}
+
 .form-newcomment-submit {
     margin-top: 5px;
 }
@@ -87,13 +97,8 @@ h2 {
     margin-bottom: -10px;
 }
 
-.follow-btn {
-    position:relative;
-    left:1%;
-}
-
 .profile-display-name {
-    margin-bottom: -3px;
+    margin-bottom: 2px;
 }
 
 

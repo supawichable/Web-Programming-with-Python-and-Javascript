@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     <h2 class="profile-display-name">{{ profile.display_name }}</h2>
@@ -9,9 +10,30 @@
     <strong>{{ profile.followings.count }}</strong> followings
     <strong>{{ profile.followers.count }}</strong> followers
 
-    {% for post in profile.posted.all %}
-        {% include "network/postblock.html" with post=post %}
+    {% for post in page_obj %}
+        <div class="postwrap">
+            {% include "network/postblock.html" with post=post %}
+
+            <div class="commentblock" id="commentblock-{{post.id}}">
+                <div class="showcomment">
+                    {% include "network/addcomment.html" %}
+                    {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
+                        <span class="commentwrap">
+                            <hr>
+                            {% include "network/commentblock.html" with comment=comment %}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     {% endfor %}
 
     {% include "network/pagination.html" with page_obj=page_obj%}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/util_functions.js' %}"></script> 
+    <script src="{% static 'network/post_functions.js' %}"></script>
+    <script src="{% static 'network/comment_functions.js' %}"></script>
+    <script src="{% static 'network/profile.js' %}"></script>
 {% endblock %}

@@ -49,7 +49,8 @@ def paginator(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "page_obj" : page_obj
+        "page_obj" : page_obj,
+        "user": request.user
     })
 
 def login_view(request):
@@ -128,6 +129,7 @@ def following(request):
 
 def profile(request, username):
     user_profile = User.objects.get(username=username)
+    # paginator = Paginator(Post.objects.all().order_by('-timestamp'), 10)
     posts = user_profile.posted.all().order_by('-timestamp')
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
