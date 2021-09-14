@@ -170,8 +170,11 @@ def comments(request, comment_id):
         }, status=400)
 
 @login_required(login_url='/login/')
-def user(request):
-    fetched_user = request.user
+def user(request, user_id=""):
+    if user_id == "":
+        fetched_user = request.user
+    else:
+        fetched_user = User.objects.get(pk=user_id)
     
     if request.method == "GET":
         return JsonResponse(fetched_user.serialize())
@@ -181,6 +184,30 @@ def user(request):
             "error": "GET request required."
         }, status=400)
 
+
+@csrf_exempt
+@login_required(login_url='login')
+def user_interact(request, user_id):
+
+    # Query for requested user
+    try:
+        fetched_user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User nor found."}, status=404)
+
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("followed") == True:
+            fetched_user.followers.add(request.user)
+        if data.get("followed") == False:
+            fetched_user.followers.remove(request.user)
+        fetched_user.save()
+        return HttpResponse(status=204)
+
+    else:
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)
 
 @csrf_exempt
 @login_required(login_url='login')
@@ -210,7 +237,7 @@ def post_interact(request, post_id):
     
     else:
         return JsonResponse({
-            "error": "GET request required."
+            "error": "PUT request required."
         }, status=400)
 
 
@@ -234,5 +261,5 @@ def comment_interact(request, comment_id):
     
     else:
         return JsonResponse({
-            "error": "GET request required."
+            "error": "PUT request required."
         }, status=400)

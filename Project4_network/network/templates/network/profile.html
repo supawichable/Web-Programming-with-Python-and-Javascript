@@ -2,13 +2,20 @@
 {% load static %}
 
 {% block body %}
-    <h2 class="profile-display-name">{{ profile.display_name }}</h2>
-    <div class="username">{{ profile.username }}</div>
-    {% if profile != request.user %}
-        <button class="btn btn-outline-primary follow-btn">Follow</button>
-    {% endif %} <br>
-    <strong>{{ profile.followings.count }}</strong> followings
-    <strong>{{ profile.followers.count }}</strong> followers
+    <div class="userinfowrap" id="user-{{profile.id}}">
+        <h2 class="profile-display-name">{{ profile.display_name }}</h2>
+        <div class="username">{{ profile.username }}</div>
+        {% if profile != request.user %}
+            <span class="follow-btn-wrap" id="follow-btn-wrap-{{profile.id}}"></span>
+            <!-- <button class="btn btn-outline-primary follow-btn" id="follow-btn-{{profile.id}}">Follow</button> -->
+        {% endif %} <br>
+        <span class="followings">
+            <strong>{{ profile.followings.count }}</strong> following
+        </span>
+        <span class="followers">
+            <strong>{{ profile.followers.count }}</strong> follower
+        </span>
+    </div>
 
     {% for post in page_obj %}
         <div class="postwrap">
@@ -35,5 +42,6 @@
     <script src="{% static 'network/util_functions.js' %}"></script> 
     <script src="{% static 'network/post_functions.js' %}"></script>
     <script src="{% static 'network/comment_functions.js' %}"></script>
+    <script src="{% static 'network/follow_functions.js' %}"></script>
     <script src="{% static 'network/profile.js' %}"></script>
 {% endblock %}

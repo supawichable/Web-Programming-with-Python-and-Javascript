@@ -18,8 +18,10 @@ urlpatterns = [
     # API Routes
     # path("posts/<str:post_list>", views.views.all_post, name="all_post"),
     path("user/", views.user, name="user"),
+    path("user/<int:user_id>", views.user, name="other_user"),
+    path("user_interact/<int:user_id>", views.user_interact, name="user_interact"),
     path("posts/<int:post_id>", views.posts, name="posts"),
     path("post_interact/<int:post_id>", views.post_interact, name="post_interact"),
     path("comments/<int:comment_id>", views.comments, name="comments"),
-    path("comment_interact/<int:comment_id>", views.comment_interact, name="comment_interact")
+    path("comment_interact/<int:comment_id>", views.comment_interact, name="comment_interact"),
 ]

@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     <h2>Following</h2>
@@ -6,13 +7,35 @@
         <div>{{ message }}</div>
     {% endif %}
 
-    <button class="btn btn-outline-primary newpost-btn">New Post</button>
+    <button class="btn btn-outline-primary" id="newpost-btn">▼ New Post</button>
     {% include "network/addpost.html" %}
 
     {% for post in page_obj %}
-        {% include "network/postblock.html" with post=post %}
+        <div class="postwrap">
+            {% include "network/postblock.html" with post=post %}
+
+            <div class="commentblock" id="commentblock-{{post.id}}">
+                <div class="showcomment">
+                    {% include "network/addcomment.html" %}
+                    {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
+                        <span class="commentwrap">
+                            <hr>
+                            {% include "network/commentblock.html" with comment=comment %}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     {% endfor %}
 
     {% include "network/pagination.html" with page_obj=page_obj%}
     
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/util_functions.js' %}"></script> 
+    <script src="{% static 'network/newpost_functions.js' %}"></script> 
+    <script src="{% static 'network/post_functions.js' %}"></script>
+    <script src="{% static 'network/comment_functions.js' %}"></script>
+    <script src="{% static 'network/authenticated.js' %}"></script>
 {% endblock %}
