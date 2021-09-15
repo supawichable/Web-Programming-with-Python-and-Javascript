@@ -1,3 +1,24 @@
+// @import "node_modules/bootstrap/scss/functions";
+// @import "node_modules/bootstrap/scss/variables";
+
+$primary:teal;
+$danger:darkred;
+
+$theme-colors: (
+    "primary":$primary,
+    "danger":$danger
+);
+
+$link-decoration: none;
+$link-color: $primary;
+$link-hover-color:#20c997;
+
+$navbar-padding-x:20px;
+$navbar-light-color:white;
+$navbar-light-brand-color:white;
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
 body{
     font-family:Arial, Helvetica, sans-serif;
 }
@@ -26,6 +47,11 @@ h2 {
     margin-top: -10px;
 }
 
+#newpost-btn {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .text {
     margin-top: 3px;
     margin-bottom: 3px;
@@ -52,6 +78,7 @@ h2 {
     font-weight: bold;
     font-size: large;
     display:inline;
+    text-decoration: none;
 }
 
 .username {
@@ -67,15 +94,31 @@ h2 {
     margin: 20px;
 }
 
+
 .like-comment-edit-btn {
     display: grid;
     margin-top: 5px;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto auto 1fr auto auto;
     grid-column-gap: 0.25em;
     
     .edit-btn {
         justify-self: end;
     } 
+}
+
+.post.editing-btns{
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-column-gap: 0.25em;
+    margin-top: 5px;
+
+    .post-edit-cancel-btn {
+        justify-self: end;
+    }
+    
+    .post-edit-submit-btn {
+        justify-self: end;
+    }
 }
 
 .follow-btn {
@@ -99,19 +142,4 @@ h2 {
 
 .profile-display-name {
     margin-bottom: 2px;
-}
-
-
-.post-edit-cancel-btn {
-    float: right;
-    margin-right: 5px;
-}
-
-.post-edit-submit-btn {
-    float: right;
-}
-
-#newpost-btn {
-    margin-bottom: 10px;
-    margin-top: 10px;
 }

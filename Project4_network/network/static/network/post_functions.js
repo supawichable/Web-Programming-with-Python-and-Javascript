@@ -79,6 +79,10 @@ function editPostControl(post) {
             const hides = post.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
             hides.forEach(hide => {hide.style.display = "none"});
 
+            var comment_btn = post.querySelector(`#comment-btn-${element_id}`);
+            var editing_comment_btn = post.querySelector(`#editing-comment-btn-${element_id}`);
+            editing_comment_btn.append(comment_btn);
+
             const show  = post.querySelector(`.${type}-show-when-edit-${element_id}`);
             show.style.display = "block";
         });
@@ -93,6 +97,10 @@ function cancelEditPostControl(post) {
 
         const hide  = post.querySelector(`.${type}-show-when-edit-${element_id}`);
         hide.style.display = "none";
+
+        const comment_btn = post.querySelector(`.comment-btn`);
+        const comment_btn_span = post.querySelector(`#comment-btn-span-${element_id}`);
+        comment_btn_span.append(comment_btn);
 
         const shows = post.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
         shows.forEach(hide => {hide.style.display = "block"});

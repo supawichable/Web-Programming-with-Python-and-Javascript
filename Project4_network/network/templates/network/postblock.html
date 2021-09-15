@@ -11,6 +11,8 @@
                 {% csrf_token %}
                 <textarea class="post form-control form-editpost-text" name="edit_post_text" rows="3">{{post.text}}</textarea>
                 <div class = "post editing-btns">
+                    <span id="editing-comment-btn-{{post.id}}"></span>
+                    <span></span>
                     <input class="post btn btn-sm btn-primary post-edit-submit-btn edit-submit-btn" type="submit" value="Submit">
                     <button class="post btn btn-sm btn-outline-primary post-edit-cancel-btn edit-cancel-btn" id="post-edit-cancel-btn-{{post.id}}" type="button">Cancel</button>
                 </div>
@@ -28,8 +30,12 @@
         <div class="like-comment-edit-btn" id="post-btns-{{post.id}}">
             {% csrf_token %}
             <button class="btn btn-sm btn-outline-primary like-btn" id="like-btn-{{post.id}}"></button>
-            <button class="btn btn-sm btn-outline-primary comment-btn" id="comment-btn-{{post.id}}">▼ Comment</button>
+            <span id="comment-btn-span-{{post.id}}">
+                <button class="btn btn-sm btn-outline-primary comment-btn" id="comment-btn-{{post.id}}" type="button">▼ Comment</button>
+            </span>
+            <span></span>
             {% if post.owner == request.user %}
+                <button class="btn btn-sm btn-outline-danger remove-btn post-hide-when-edit-{{post.id}}" id="remove-btn-{{post.id}}">Remove</button>
                 <button class="btn btn-sm btn-outline-primary edit-btn post-hide-when-edit-{{post.id}}" id="edit-btn-{{post.id}}">Edit</button>
             {% endif %}
         </div>
