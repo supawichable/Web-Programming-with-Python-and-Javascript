@@ -1,5 +1,6 @@
 function likePostControl(post) {
     // render like buttons (like number control)
+
     const element = post.querySelector(".like-btn");
     const element_id = parseInt(element.id.substring(9));
     const type = "post";
@@ -10,7 +11,7 @@ function likePostControl(post) {
     .then(response => response.json())
     .then(element_obj => {
         update_likes(element_id, element, type);
-
+        
         fetch("/user/")
         .then(response => response.json())
         .then(user => {
@@ -20,12 +21,14 @@ function likePostControl(post) {
                 element.className = class_outline;
             }
         });
+    })
+    .catch(error => {
+        console.log("user not logged in");
     });
 
     // const element = post.querySelector(".like-btn");
     // handle like post
     element.addEventListener('click', (event) => {
-        // const element_id = parseInt(element.id.substring(9));
         const type = "post";
         const class_outline = `btn btn-sm btn-outline-primary like-btn ${type}-hide-when-edit-${element_id}`;
         const class_non_outline = "btn btn-sm btn-primary like-btn";
@@ -40,11 +43,74 @@ function likePostControl(post) {
     });
 }
 
+function likePostControl_unauth(post) {
+    // render like buttons (like number control)
+
+    const element = post.querySelector(".like-btn");
+    const element_id = parseInt(element.id.substring(9));
+    const type = "post";
+    const class_outline = `btn btn-sm btn-outline-primary like-btn ${type}-hide-when-edit-${element_id}`;
+
+    fetch(`/${type}s/${element_id}`)
+    .then(response => response.json())
+    .then(element_obj => {
+        update_likes(element_id, element, type);
+        element.className = class_outline;
+    });
+
+    // handle like post
+    element.addEventListener('click', (event) => {
+        location.href = "login";
+    });
+}
+
+function likePostControl(post) {
+    // render like buttons (like number control)
+    const element = post.querySelector(".like-btn");
+    const element_id = parseInt(element.id.substring(9));
+    const type = "post";
+    const class_outline = `btn btn-sm btn-outline-primary like-btn ${type}-hide-when-edit-${element_id}`;
+    const class_non_outline = `btn btn-sm btn-primary like-btn ${type}-hide-when-edit-${element_id}`;
+
+    fetch(`/${type}s/${element_id}`)
+    .then(response => response.json())
+    .then(element_obj => {
+        update_likes(element_id, element, type);
+        
+        fetch("/user/")
+        .then(response => response.json())
+        .then(user => {
+            if (element_obj.liked_by.includes(user.username)) {
+                element.className = class_non_outline;
+            } else {
+                element.className = class_outline;
+            }
+        })
+        .catch(error => {
+            console.log("user not logged in");
+        });
+    });
+
+    // const element = post.querySelector(".like-btn");
+    // handle like post
+    element.addEventListener('click', (event) => {
+        const type = "post";
+        const class_outline = `btn btn-sm btn-outline-primary like-btn ${type}-hide-when-edit-${element_id}`;
+        const class_non_outline = "btn btn-sm btn-primary like-btn";
+        if (element.classList.contains('btn-outline-primary')) {
+            like(element_id, type);
+            element.className = class_non_outline;
+        } else if (element.classList.contains('btn-primary')) {
+            unlike(element_id, type);
+            element.className = class_outline;
+        }
+        setTimeout(function(){ update_likes(element_id, element, type); }, 100);
+    });
+}
+
+
 function commentPostControl(post) {
     // hide all comments
-    // post.querySelectorAll(".commentblock").forEach(commentblock => {
-    //     commentblock.style.display = "none";
-    // });
     var commentblock = post.querySelector(".commentblock");
     commentblock.style.display = "none";
     const element = post.querySelector(".comment-btn");
@@ -107,4 +173,27 @@ function cancelEditPostControl(post) {
     });
 }
 
+function removePostControl(post) {
+    const element = post.querySelector('.remove-btn');
+    if (element) {       
+        element.addEventListener('click', (event) => { 
+            post.remove();
+            const element_id = parseInt(element.id.substring(11));
+            const csrftoken = getCookie('csrftoken');
+            fetch(`/post_interact/${element_id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    remove: true
+                }),
+                headers: {"X-CSRFToken": csrftoken}
+            }); 
+            const checkpost = document.querySelector(".postwrap");
+            console.log(checkpost);
+            if (checkpost === null) {
+                const newpost_btn = document.querySelector(".btn-outline-primary");
+                newpost_btn.click();   
+            }
+        });
+    }
+}
 

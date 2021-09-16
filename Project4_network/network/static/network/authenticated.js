@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         commentPostControl(post);
         editPostControl(post);
         cancelEditPostControl(post);
+        removePostControl(post);
     });
 
     document.querySelectorAll(".commentwrap").forEach((comment) => {

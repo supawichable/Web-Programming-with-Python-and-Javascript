@@ -6,8 +6,8 @@
         <h2 class="profile-display-name">{{ profile.display_name }}</h2>
         <div class="username">{{ profile.username }}</div>
         {% if profile != request.user %}
-            <span class="follow-btn-wrap" id="follow-btn-wrap-{{profile.id}}"></span>
-            <!-- <button class="btn btn-outline-primary follow-btn" id="follow-btn-{{profile.id}}">Follow</button> -->
+            <!-- <span class="follow-btn-wrap" id="follow-btn-wrap-{{profile.id}}"> -->
+            <button class="btn follow-btn" id="follow-btn-{{profile.id}}"></button>
         {% endif %} <br>
         <span class="followings">
             <strong>{{ profile.followings.count }}</strong> following
@@ -16,6 +16,14 @@
             <strong>{{ profile.followers.count }}</strong> follower
         </span>
     </div>
+
+    {% if message %}
+        <div class="profile-message">
+            <hr>
+            {{ message }}
+            <hr>
+        </div>
+    {% endif %}
 
     {% for post in page_obj %}
         <div class="postwrap">

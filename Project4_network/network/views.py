@@ -11,6 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 
 def index(request):
+    return paginator(request)
+
+@login_required
+def addpost(request):
     if request.method == "POST":
         if 'post_text' in request.POST:
             post_text = request.POST["post_text"]
@@ -18,7 +22,7 @@ def index(request):
             post.save()
     return paginator(request)
 
-@login_required(login_url='login')
+@login_required
 def comment(request, post_id):
     if request.method == "POST":
         if 'comment_text' in request.POST:
@@ -28,7 +32,7 @@ def comment(request, post_id):
             comment.save()
     return paginator(request)
 
-@login_required(login_url='login')
+@login_required
 def editpost(request, post_id):
     if request.method == "POST":
         if 'edit_post_text' in request.POST:
@@ -36,7 +40,7 @@ def editpost(request, post_id):
             Post.objects.filter(pk=post_id).update(text=edittext)
     return paginator(request)
 
-@login_required(login_url="login")
+@login_required
 def editcomment(request, comment_id):
     if request.method == "POST":
         if 'edit_comment_text' in request.POST:
@@ -45,9 +49,16 @@ def editcomment(request, comment_id):
     return paginator(request)
 
 def paginator(request):
-    paginator = Paginator(Post.objects.all().order_by('-timestamp'), 10)
+    posts = Post.objects.all()
+    paginator = Paginator(posts.order_by('-timestamp'), 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    if list(posts) == []:
+        return render(request, "network/index.html", {
+            "page_obj" : page_obj,
+            "user": request.user,
+            "message": "There is no post yet."
+        })
     return render(request, "network/index.html", {
         "page_obj" : page_obj,
         "user": request.user
@@ -113,7 +124,7 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-@login_required(login_url='login')
+@login_required
 def following(request):
     if request.method == "POST":
         post_text = request.POST["post_text"]
@@ -123,6 +134,11 @@ def following(request):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    if list(posts) == []:
+        return render(request, "network/following.html", {
+            "page_obj" : page_obj,
+            "message": "There is no post yet."
+        })
     return render(request, "network/following.html", {
         "page_obj" : page_obj
     })
@@ -134,6 +150,13 @@ def profile(request, username):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    print(list(posts.all()))
+    if list(posts.all()) == []:
+        return render(request, "network/profile.html", {
+        "profile": user_profile,
+        "page_obj": page_obj,
+        "message": "{} has no post yet.".format(user_profile.display_name)
+    })
     return render(request, "network/profile.html", {
         "profile": user_profile,
         "page_obj": page_obj
@@ -169,7 +192,7 @@ def comments(request, comment_id):
             "error": "GET request required."
         }, status=400)
 
-@login_required(login_url='/login/')
+@login_required
 def user(request, user_id=""):
     if user_id == "":
         fetched_user = request.user
@@ -184,9 +207,7 @@ def user(request, user_id=""):
             "error": "GET request required."
         }, status=400)
 
-
-@csrf_exempt
-@login_required(login_url='login')
+@login_required
 def user_interact(request, user_id):
 
     # Query for requested user
@@ -209,8 +230,7 @@ def user_interact(request, user_id):
             "error": "PUT request required."
         }, status=400)
 
-@csrf_exempt
-@login_required(login_url='login')
+@login_required
 def post_interact(request, post_id):
 
     # Query for requested post
@@ -223,8 +243,10 @@ def post_interact(request, post_id):
         data = json.loads(request.body)
         if data.get("like") == True:
             post.liked_by.add(request.user)
+            post.save()
         if data.get("like") == False:
             post.liked_by.remove(request.user)
+            post.save()
         if data.get("comment"):
             comment_text = data.get("comment")
             comment = Comment(text = comment_text, owner =request.user, post=post)
@@ -232,7 +254,9 @@ def post_interact(request, post_id):
         if data.get("edittext"):
             edittext = data.get("edittext")
             post = Post.objects.filter(pk=post_id).update(text=edittext)
-        post.save()
+            post.save()
+        if data.get("remove") == True:
+            post.delete()
         return HttpResponse(status=204)
     
     else:
@@ -240,9 +264,7 @@ def post_interact(request, post_id):
             "error": "PUT request required."
         }, status=400)
 
-
-@csrf_exempt
-@login_required(login_url='login')
+@login_required
 def comment_interact(request, comment_id):
     # Query for requested comment
     try:

@@ -1,9 +1,6 @@
 function followControl(userinfo) {
-    const follow_btn_wrap = userinfo.querySelector(".follow-btn-wrap");
     const user_id = parseInt(userinfo.id.substring(5));
-    const follow_btn = document.createElement("button");
-    follow_btn.className = "btn follow-btn";
-    follow_btn_wrap.append(follow_btn);
+    const follow_btn = userinfo.querySelector('.follow-btn');
 
     fetch(`/user/${user_id}`)
     .then(response => response.json())
@@ -38,20 +35,24 @@ function followControl(userinfo) {
 }
 
 function follow(user_id) {
+    const csrftoken = getCookie('csrftoken');
     fetch(`/user_interact/${user_id}`, {
         method: 'PUT',
         body: JSON.stringify({
             followed: true
-        })
+        }),
+        headers: {"X-CSRFToken": csrftoken}
     })
 }
 
 function unfollow(user_id) {
+    const csrftoken = getCookie('csrftoken');
     fetch(`/user_interact/${user_id}`, {
         method: 'PUT',
         body: JSON.stringify({
             followed: false
-        })
+        }),
+        headers: {"X-CSRFToken": csrftoken}
     })
 }
 

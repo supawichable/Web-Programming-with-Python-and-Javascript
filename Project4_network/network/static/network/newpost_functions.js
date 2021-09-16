@@ -10,11 +10,11 @@ function newPostControl(){
         if (newpost.style.display === "none") {
             newpost.style.display = "block";
             newpost_btn.className = "btn btn-primary";
-            newpost_btn.innerHTML = "▲ New Post";
+            newpost_btn.innerHTML = "▲ What are you thinking?";
         } else {
             newpost.style.display = "none";
             newpost_btn.className = "btn btn-outline-primary";
-            newpost_btn.innerHTML = "▼ New Post";
+            newpost_btn.innerHTML = "▼ What are you thinking?";
         }
     });   
 }

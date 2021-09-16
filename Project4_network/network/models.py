@@ -6,7 +6,6 @@ from django.utils import timezone
 
 now = timezone.now()
 
-
 class User(AbstractUser):
     display_name = models.CharField(max_length = 150, default=None)
     followings = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="followers")
@@ -20,9 +19,6 @@ class User(AbstractUser):
             "follwers_num": self.followers.count()
         }
 
-# class Following(models.Model):
-#     target = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
-#     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="targets")
 
 class Post(models.Model):
     text = models.TextField(max_length = 280)

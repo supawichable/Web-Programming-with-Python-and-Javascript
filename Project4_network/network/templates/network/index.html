@@ -3,15 +3,22 @@
 
 {% block body %}
     <h2>All Posts</h2>
+
     {% if message %}
-        <div>{{ message }}</div>
+        <div class="index-message">
+            <hr>
+            {{ message }} <br>
+            <button class="btn btn-outline-primary" id="newpost-btn">▼ What are you thinking?</button>
+            {% include "network/addpost.html" %}
+            <hr>
+        </div>
+    {% else %}
+        <button class="btn btn-outline-primary" id="newpost-btn">▼ What are you thinking?</button>
+        {% include "network/addpost.html" %}
     {% endif %}
 
-    <button class="btn btn-outline-primary" id="newpost-btn">▼ New Post</button>
-    {% include "network/addpost.html" %}
-
     {% for post in page_obj %}
-        <div class="postwrap">
+        <div class="postwrap" id="postwrap-{{post.id}}">
             {% include "network/postblock.html" with post=post %}
 
             <div class="commentblock" id="commentblock-{{post.id}}">
@@ -37,5 +44,9 @@
     <script src="{% static 'network/newpost_functions.js' %}"></script> 
     <script src="{% static 'network/post_functions.js' %}"></script>
     <script src="{% static 'network/comment_functions.js' %}"></script>
-    <script src="{% static 'network/authenticated.js' %}"></script>
+    {% if user.is_authenticated %}
+        <script src="{% static 'network/authenticated.js' %}"></script>
+    {% else %}
+        <script src="{% static 'network/unauthenticated.js' %}"></script>
+    {% endif %}
 {% endblock %}

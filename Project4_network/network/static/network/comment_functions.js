@@ -19,7 +19,10 @@ function likeCommentControl(comment) {
             } else {
                 element.className = class_outline;
             }
-        });
+        })
+        .catch(error => {
+            console.log("user not logged in");
+        })
     });
 
     // const element = post.querySelector(".like-btn");
@@ -37,6 +40,29 @@ function likeCommentControl(comment) {
             element.className = class_outline;
         }
         setTimeout(function(){ update_likes(element_id, element, type); }, 100);
+    });
+}
+
+function likeCommentControl_unauth(comment) {
+    // render like buttons (like number control)
+    const element = comment.querySelector(".like-btn");
+    const element_id = parseInt(element.id.substring(17));
+    const type = "comment";
+    const class_outline = `btn btn-sm btn-outline-primary comment-like-btn like-btn ${type}-hide-when-edit-${element_id}`;
+    const class_non_outline = `btn btn-sm btn-primary comment-like-btn like-btn ${type}-hide-when-edit-${element_id}`;
+
+    fetch(`/${type}s/${element_id}`)
+    .then(response => response.json())
+    .then(element_obj => {
+        update_likes(element_id, element, type);
+        element.className = class_outline;
+    });
+
+    // const element = post.querySelector(".like-btn");
+    // handle like post
+    element.addEventListener('click', (event) => {
+        // const element_id = parseInt(element.id.substring(17));
+        location.href = "login";
     });
 }
 

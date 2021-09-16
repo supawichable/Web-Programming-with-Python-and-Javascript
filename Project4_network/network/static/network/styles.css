@@ -10532,7 +10532,6 @@ h2, .h2 {
 }
 
 #newpost-btn {
-  margin-bottom: 10px;
   margin-top: 10px;
 }
 
@@ -10547,6 +10546,7 @@ h2, .h2 {
 }
 
 .form-newpost {
+  padding-bottom: 10px;
   margin: 20px;
 }
 
@@ -10601,6 +10601,29 @@ h2, .h2 {
   justify-self: end;
 }
 
+.profile-message {
+  display: grid-inline;
+  justify-content: center;
+  font-weight: bold;
+  font-size: large;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.index-message {
+  display: grid-inline;
+  justify-content: center;
+  font-weight: bold;
+  font-size: large;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.pagination {
+  display: grid-inline;
+  justify-content: center;
+}
+
 .follow-btn {
   padding-left: 10px;
   padding-right: 10px;
@@ -10613,6 +10636,14 @@ h2, .h2 {
 
 .form-newcomment-submit {
   margin-top: 5px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.prompt {
+  margin-top: 10px;
 }
 
 .editing-btns {

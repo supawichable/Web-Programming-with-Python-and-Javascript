@@ -3,12 +3,14 @@
 
 {% block body %}
     <h2>Following</h2>
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
 
-    <button class="btn btn-outline-primary" id="newpost-btn">▼ New Post</button>
-    {% include "network/addpost.html" %}
+    {% if message %}
+        <div class="index-message">
+            <hr>
+            {{ message }} <br>
+            <hr>
+        </div>
+    {% endif %}
 
     {% for post in page_obj %}
         <div class="postwrap">
