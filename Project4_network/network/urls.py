@@ -7,7 +7,6 @@ urlpatterns = [
     path("", views.index, name="index"),
     path('login/', views.login_view, name="login"),
     path('addpost', views.addpost, name="addpost"),
-    # path('login/<str:next>', views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("following", views.following, name="following"),
@@ -15,6 +14,7 @@ urlpatterns = [
     path("comment/<int:post_id>", views.comment, name="comment"),
     path("editpost/<int:post_id>", views.editpost, name="editpost"),
     path("editcomment/<int:comment_id>", views.editcomment, name="editcomment"),
+    path("editprofile/<str:username>", views.editprofile, name="editprofile"),
 
     # API Routes
     # path("posts/<str:post_list>", views.views.all_post, name="all_post"),

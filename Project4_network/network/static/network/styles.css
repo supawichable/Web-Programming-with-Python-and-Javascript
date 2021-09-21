@@ -10503,12 +10503,40 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+@keyframes birthday-blink {
+  0% {
+    color: black;
+    font-size: medium;
+  }
+  50% {
+    color: teal;
+    font-size: larger;
+  }
+  100% {
+    color: teal;
+    font-size: medium;
+  }
+}
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
 h2, .h2 {
   font-weight: bold;
+  margin-bottom: -5px;
+}
+h2 .profile-edit-btn, .h2 .profile-edit-btn,
+h2 .follow-btn,
+.h2 .follow-btn {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: relative;
+  left: 1%;
+  margin-left: -10px;
+  position: relative;
+  bottom: 5px;
 }
 
 .body {
@@ -10570,6 +10598,16 @@ h2, .h2 {
   display: inline;
 }
 
+.info {
+  margin-top: 10px;
+}
+
+.birthday {
+  animation-name: birthday-blink;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+
 .showpost {
   margin: 20px;
 }
@@ -10624,21 +10662,21 @@ h2, .h2 {
   justify-content: center;
 }
 
-.follow-btn {
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  position: relative;
-  left: 1%;
-  margin-bottom: 5px;
-}
-
 .form-newcomment-submit {
   margin-top: 5px;
 }
 
 .form-group {
+  margin-bottom: 10px;
+}
+
+.login-fields,
+.register-fields {
+  margin-top: 15px;
+}
+
+.editprofile-btns,
+.register-btn {
   margin-bottom: 10px;
 }
 

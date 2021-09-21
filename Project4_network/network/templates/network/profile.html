@@ -3,18 +3,37 @@
 
 {% block body %}
     <div class="userinfowrap" id="user-{{profile.id}}">
-        <h2 class="profile-display-name">{{ profile.display_name }}</h2>
-        <div class="username">{{ profile.username }}</div>
-        {% if profile != request.user %}
-            <!-- <span class="follow-btn-wrap" id="follow-btn-wrap-{{profile.id}}"> -->
-            <button class="btn follow-btn" id="follow-btn-{{profile.id}}"></button>
-        {% endif %} <br>
-        <span class="followings">
-            <strong>{{ profile.followings.count }}</strong> following
-        </span>
-        <span class="followers">
-            <strong>{{ profile.followers.count }}</strong> follower
-        </span>
+        <h2>
+            <span class="profile-display-name">{{ profile.display_name }}</span>
+            {% if profile != request.user %}
+                <button class="btn follow-btn" id="follow-btn-{{profile.id}}"></button>
+            {% else %}
+                <a href="{% url 'editprofile' username=user.username %}" class="btn btn-outline-primary profile-edit-btn" id="profile-edit-btn-{{profile.id}}">Edit Profile</a>
+            {% endif %}
+        </h2> 
+        <div class="username">@{{ profile.username }}</div><br>
+        <div class="info">
+            <div class="birthday">
+                {% if today.month == profile.date_of_birth.month and today.day == profile.date_of_birth.day %}
+                    {% if profile != request.user %}
+                        <strong>🎉 Today is {{profile.display_name}}'s birthday!</strong>
+                    {% else %}
+                        <strong>🎉 Happy Birthday, {{profile.display_name}}!</strong>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% if profile.about %}
+                <div class="about">
+                    {{ profile.about }}
+                </div>
+            {% endif %}
+            <span class="followings">
+                <strong>{{ profile.followings.count }}</strong> following
+            </span>
+            <span class="followers">
+                <strong>{{ profile.followers.count }}</strong> follower
+            </span>
+        </div>
     </div>
 
     {% if message %}

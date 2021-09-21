@@ -7,26 +7,58 @@
     {% if message %}
         <div>{{ message }}</div>
     {% endif %}
+    <div class="register-fields">
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input class="form-control register" type="text" id="display_name" name="display_name" placeholder="Display Name" required>
+                </div>
+            </div>
 
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input class="form-control" autofocus type="text" name="display_name" placeholder="Display Name">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="text" name="username" placeholder="@username">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="email" name="email" placeholder="Email Address">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Register">
-    </form>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input class="form-control register" type="text" id="username" name="username" placeholder="Username" aria-describedby="inputGroupPrepend" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input class="form-control register" type="email" id="email" name="email" placeholder="Email Address" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input class="form-control register" type="text" onfocus="(this.type='date')" name="date_of_birth" id="date_of_birth" placeholder="Date of Birth">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <textarea rows="4" class="form-control register" type="text" id="about" name="about" placeholder="About"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input class="form-control register" type="password" id="password" name="password" placeholder="Password">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input class="form-control register" type="password" id="confirmation" name="confirmation" placeholder="Confirm Password">
+                </div>
+            </div>
+            <input class="btn btn-primary register-btn" type="submit" value="Register">
+        </form>
+    </div>
 
     Already have an account? <a href="{% url 'login' %}">Log In here.</a>
 

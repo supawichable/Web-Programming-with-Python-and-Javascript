@@ -3,7 +3,7 @@
 
         <a class="user-direct" href="{% url 'profile' username=post.owner.username %}">
             <div class="display_name">{{ post.owner.display_name }}</div> 
-            <div class="username">{{ post.owner.username }}</div><br>
+            <div class="username">@{{ post.owner.username }}</div><br>
         </a>
 
         <div class="post edittext post-show-when-edit-{{post.id}}" id="post-edittext-{{post.id}}">

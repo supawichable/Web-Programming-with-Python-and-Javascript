@@ -1,7 +1,7 @@
 <div class="showcomment">
     <a class="user-direct" href="{% url 'profile' username=comment.owner.username %}">
         <div class="display_name">{{ comment.owner.display_name }}</div>
-        <div class="username">{{ comment.owner.username }}</div><br>
+        <div class="username">@{{ comment.owner.username }}</div><br>
     </a>
 
     <div class="comment edittext comment-show-when-edit-{{comment.id}}" id="comment-edittext-{{comment.id}}">

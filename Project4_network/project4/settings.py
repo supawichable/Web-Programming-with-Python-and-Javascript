@@ -81,7 +81,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = "network.User"
+AUTH_USER_MODEL = "network.CustomUser"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -123,3 +123,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
+
+# DATE_INPUT_FORMATS = ['%d-%m-%Y']

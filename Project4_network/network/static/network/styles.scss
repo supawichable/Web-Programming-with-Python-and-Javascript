@@ -19,23 +19,20 @@ $navbar-light-brand-color:white;
 
 @import "node_modules/bootstrap/scss/bootstrap";
 
-// @keyframes remove {
-//     0% {
-//         opacity: 1;
-//         height: 100%;
-//         line-height: 100%;
-//     }
-//     75% {
-//         opacity: 0;
-//         height: 100%;
-//         line-height: 100%;
-//     }
-//     100% {
-//         opacity: 0;
-//         height: 0px;
-//         line-height: 0px;
-//     }
-// }
+@keyframes birthday-blink{
+    0% {
+        color: black;
+        font-size:medium;
+    }
+    50% {
+        color: $primary;
+        font-size: larger;
+    }
+    100% {
+        color: $primary;
+        font-size:medium;
+    }
+}
 
 body{
     font-family:Arial, Helvetica, sans-serif;
@@ -43,6 +40,20 @@ body{
 
 h2 {
     font-weight: bold;
+    margin-bottom: -5px;
+
+    .profile-edit-btn,
+    .follow-btn {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        position:relative;
+        left:1%;
+        margin-left: -10px;
+        position: relative;
+        bottom:5px;
+    }
 }
 
 .body {
@@ -104,6 +115,16 @@ h2 {
     display:inline;
 }
 
+.info {
+    margin-top: 10px;
+}
+
+.birthday {
+    animation-name: birthday-blink;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
 .showpost {
     margin: 20px;
 }
@@ -161,21 +182,21 @@ h2 {
     justify-content: center;
 }
 
-.follow-btn {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    position:relative;
-    left:1%;
-    margin-bottom: 5px;
-}
-
 .form-newcomment-submit {
     margin-top: 5px;
 }
 
 .form-group {
+    margin-bottom: 10px;
+}
+
+.login-fields,
+.register-fields{
+    margin-top: 15px;
+}
+
+.editprofile-btns,
+.register-btn {
     margin-bottom: 10px;
 }
 
@@ -187,6 +208,7 @@ h2 {
     margin-top: 5px;
     margin-bottom: -10px;
 }
+
 
 .profile-display-name {
     margin-bottom: 2px;

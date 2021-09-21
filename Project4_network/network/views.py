@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
+from datetime import date
 
 from .models import *
 
@@ -102,18 +103,23 @@ def register(request):
         display_name = request.POST["display_name"]
         username = request.POST["username"]
         email = request.POST["email"]
+        date_of_birth = request.POST["date_of_birth"]
+        about = request.POST["about"]
+
+        if not date_of_birth:
+            date_of_birth = None
 
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(request, "network/register.html", {
-                "message": "Passwords must match."
+                "message": "⚠️ Passwords must match."
             })
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password, display_name = display_name)
+            user = CustomUser.objects.create_user(username=username, email=email, password=password, display_name=display_name, date_of_birth=date_of_birth, about=about)
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
@@ -144,7 +150,7 @@ def following(request):
     })
 
 def profile(request, username):
-    user_profile = User.objects.get(username=username)
+    user_profile = CustomUser.objects.get(username=username)
     # paginator = Paginator(Post.objects.all().order_by('-timestamp'), 10)
     posts = user_profile.posted.all().order_by('-timestamp')
     paginator = Paginator(posts, 10)
@@ -155,12 +161,54 @@ def profile(request, username):
         return render(request, "network/profile.html", {
         "profile": user_profile,
         "page_obj": page_obj,
-        "message": "{} has no post yet.".format(user_profile.display_name)
+        "message": "{} has no post yet.".format(user_profile.display_name),
+        "today": date.today()
     })
     return render(request, "network/profile.html", {
         "profile": user_profile,
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "today": date.today()
     })
+
+def editprofile(request, username):
+    user_profile = CustomUser.objects.get(username=username)
+    if not user_profile.date_of_birth:
+        date_of_birth = None
+    else:
+        date_of_birth = user_profile.date_of_birth.strftime("%Y-%m-%d")
+    if request.method == "POST":
+        display_name = request.POST["display_name"]
+        new_username = request.POST["username"]
+        email = request.POST["email"]
+        date_of_birth = request.POST["date_of_birth"]
+        about = request.POST["about"]
+
+        if not date_of_birth:
+            date_of_birth = None
+
+        try:
+            user = CustomUser.objects.filter(username=username)
+            user.update(display_name=display_name, username=new_username,email=email, date_of_birth=date_of_birth, about=about)
+        except IntegrityError:
+            return render(request, "network/editprofile.html", {
+                "message": "⚠️ Username already taken.",
+                "profile": user_profile,
+                "date_of_birth": user_profile.date_of_birth.strftime("%Y-%m-%d")
+            })
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+        if password != confirmation:
+            return render(request, "network/editprofile.html", {
+                "message": "⚠️ Passwords must match.",
+                "profile": user_profile,
+                "date_of_birth": user_profile.date_of_birth.strftime("%Y-%m-%d")
+            })
+        return HttpResponseRedirect(reverse('profile', args=[new_username]))
+    return render(request, "network/editprofile.html", {
+        "profile": user_profile,
+        "date_of_birth": date_of_birth
+    })
+
 
 def posts(request, post_id):
     # Query for requested post
@@ -197,7 +245,7 @@ def user(request, user_id=""):
     if user_id == "":
         fetched_user = request.user
     else:
-        fetched_user = User.objects.get(pk=user_id)
+        fetched_user = CustomUser.objects.get(pk=user_id)
     
     if request.method == "GET":
         return JsonResponse(fetched_user.serialize())
@@ -212,8 +260,8 @@ def user_interact(request, user_id):
 
     # Query for requested user
     try:
-        fetched_user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
+        fetched_user = CustomUser.objects.get(pk=user_id)
+    except CustomUser.DoesNotExist:
         return JsonResponse({"error": "User nor found."}, status=404)
 
     if request.method == "PUT":
