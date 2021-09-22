@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -62,8 +63,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     start_date = models.DateTimeField(default=timezone.now)
     followings = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="followers")
     profile_img = models.ImageField(
-        upload_to='profile_images/',
-        verbose_name="Profile Image",
+        upload_to='profile_img',
+        default="profile_img/default1.jpg",
         null=True,
         blank=True
     )

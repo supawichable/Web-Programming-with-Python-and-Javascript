@@ -1,8 +1,9 @@
 <div id="newcomment">
-    <form class="form-group form-newcomment" action="{% url 'comment' post_id=post.id %}" method="post">
+    <form class="form-group form-newcomment" action="{% url 'addcomment' post_id=post.id %}" method="post">
         <h5>Write a Comment</h5>
         {% csrf_token %}
         <textarea class="form-control form-newcomment-text" name="comment_text" rows="2"></textarea>
         <input class="btn btn-primary form-newcomment-submit" id="newcomment-submit-{{post.id}}" type="submit" value="Comment">
+        <input type="hidden" name="page_rendering" value="{{page_rendering}}">
     </form>
 </div>

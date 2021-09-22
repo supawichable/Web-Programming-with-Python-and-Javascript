@@ -9,21 +9,21 @@
             <hr>
             {{ message }} <br>
             <button class="btn btn-outline-primary" id="newpost-btn">▼ What are you thinking?</button>
-            {% include "network/addpost.html" %}
+            {% include "network/addpost.html" with page_rendering="index" %}
             <hr>
         </div>
     {% else %}
         <button class="btn btn-outline-primary" id="newpost-btn">▼ What are you thinking?</button>
-        {% include "network/addpost.html" %}
+        {% include "network/addpost.html" with page_rendering="index" %}
     {% endif %}
 
     {% for post in page_obj %}
         <div class="postwrap" id="postwrap-{{post.id}}">
-            {% include "network/postblock.html" with post=post %}
+            {% include "network/postblock.html" with post=post page_rendering="index" %}
 
             <div class="commentblock" id="commentblock-{{post.id}}">
                 <div class="showcomment">
-                    {% include "network/addcomment.html" %}
+                    {% include "network/addcomment.html" with page_rendering="index" %}
                     {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
                         <span class="commentwrap">
                             <hr>

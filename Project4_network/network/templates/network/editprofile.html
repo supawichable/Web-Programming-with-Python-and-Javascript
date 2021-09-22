@@ -3,11 +3,9 @@
 
 {% block body %}
     <h2>Edit Profile</h2>
-    <br>
     {% if message %}
         <div><strong>{{ message }}</strong></div>
     {% endif %}
-    <br>
     <form action="{% url 'editprofile' username=profile.username %}" method="post">
         {% csrf_token %}
         <div class="form-group row">

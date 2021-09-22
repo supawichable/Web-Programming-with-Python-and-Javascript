@@ -38,9 +38,23 @@ body{
     font-family:Arial, Helvetica, sans-serif;
 }
 
+.userinfowrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap: 1.5em;
+
+    .userinfo{
+        align-self: center;
+    }
+
+    h2 {
+        margin-bottom: -5px;
+    }
+}
+
 h2 {
     font-weight: bold;
-    margin-bottom: -5px;
+    // margin-bottom: -5px;
 
     .profile-edit-btn,
     .follow-btn {
@@ -212,4 +226,53 @@ h2 {
 
 .profile-display-name {
     margin-bottom: 2px;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit:cover;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.showpost-grid{
+    display:grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap:8px;
+    margin-bottom: 10px;
+
+    .showpost-profile-img {
+        width: 50px;
+        height: 50px;
+        object-fit:cover;
+        margin: 0 auto;
+        border-radius: 50%;
+    }
+
+    .showpost-info {
+        align-self: center;
+    }
+}
+
+.showcomment-grid{
+    display:grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap:8px;
+    margin-bottom: 10px;
+
+    .showcomment-profile-img {
+        width: 50px;
+        height: 50px;
+        object-fit:cover;
+        margin: 0 auto;
+        border-radius: 50%;
+    }
+}
+
+.commenttext,
+.posttext {
+    margin-top:10px;
+    margin-bottom:10px;
+    font-size: large;
 }

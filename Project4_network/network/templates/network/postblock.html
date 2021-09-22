@@ -1,37 +1,43 @@
 <div class="postblock">
     <div class="showpost">
+        <div class="showpost-grid">
+            <img src="{{post.owner.profile_img.url}}" class="showpost-profile-img">
+            <div class="showpost-info">
+                <a class="user-direct" href="{% url 'profile' username=post.owner.username %}">
+                    <div class="display_name">{{ post.owner.display_name }}</div> 
+                    <div class="username">@{{ post.owner.username }}</div><br>
+                </a>
 
-        <a class="user-direct" href="{% url 'profile' username=post.owner.username %}">
-            <div class="display_name">{{ post.owner.display_name }}</div> 
-            <div class="username">@{{ post.owner.username }}</div><br>
-        </a>
-
-        <div class="post edittext post-show-when-edit-{{post.id}}" id="post-edittext-{{post.id}}">
-            <form class="post form-group form-edit-post" action="{% url 'editpost' post_id=post.id %}" method="post">
-                {% csrf_token %}
-                <textarea class="post form-control form-editpost-text" name="edit_post_text" rows="3">{{post.text}}</textarea>
-                <div class = "post editing-btns">
-                    <span id="editing-comment-btn-{{post.id}}"></span>
-                    <span></span>
-                    <input class="post btn btn-sm btn-primary post-edit-submit-btn edit-submit-btn" type="submit" value="Submit">
-                    <button class="post btn btn-sm btn-outline-primary post-edit-cancel-btn edit-cancel-btn" id="post-edit-cancel-btn-{{post.id}}" type="button">Cancel</button>
+                <div class="post edittext post-show-when-edit-{{post.id}}" id="post-edittext-{{post.id}}">
+                    <form class="post form-group form-edit-post" action="{% url 'editpost' post_id=post.id %}" method="post">
+                        {% csrf_token %}
+                        <textarea class="post form-control form-editpost-text" name="edit_post_text" rows="3">{{post.text}}</textarea>
+                        <input type="hidden" name="page_rendering" value="{{page_rendering}}">
+                        <div class = "post editing-btns">
+                            <span id="editing-comment-btn-{{post.id}}"></span>
+                            <span></span>
+                            <input class="post btn btn-sm btn-primary post-edit-submit-btn edit-submit-btn" type="submit" value="Submit">
+                            <button class="post btn btn-sm btn-outline-primary post-edit-cancel-btn edit-cancel-btn" id="post-edit-cancel-btn-{{post.id}}" type="button">Cancel</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+
+                <div class="timestamp post-hide-when-edit-{{post.id}}" id="post-timestamp-{{post.id}}">
+                    {{ post.timestamp }}
+                </div>
+            </div>
         </div>
 
-        <div class="text post-hide-when-edit-{{post.id}}" id="post-text-{{post.id}}">
+        <div class="text posttext post-hide-when-edit-{{post.id}}" id="post-text-{{post.id}}">
             {{ post.text }}
-        </div>
-
-        <div class="timestamp post-hide-when-edit-{{post.id}}" id="post-timestamp-{{post.id}}">
-            {{ post.timestamp }}
         </div>
 
         <div class="like-comment-edit-btn" id="post-btns-{{post.id}}">
             {% csrf_token %}
             <button class="btn btn-sm btn-outline-primary like-btn" id="like-btn-{{post.id}}"></button>
             <span id="comment-btn-span-{{post.id}}">
-                <button class="btn btn-sm btn-outline-primary comment-btn" id="comment-btn-{{post.id}}" type="button">▼ Comment</button>
+                <!-- <button class="btn btn-sm btn-outline-primary comment-btn" id="comment-btn-{{post.id}}" type="button">▼ Comment</button> -->
+                <button class="btn btn-sm comment-btn" id="comment-btn-{{post.id}}" type="button"></button>
             </span>
             <span></span>
             {% if post.owner == request.user %}

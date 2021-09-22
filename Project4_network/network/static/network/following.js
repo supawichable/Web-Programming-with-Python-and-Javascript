@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         likeCommentControl(comment);
         editCommentControl(comment);
         cancelEditCommentControl(comment);
+        removeCommentControl(comment);
     });
 
 });

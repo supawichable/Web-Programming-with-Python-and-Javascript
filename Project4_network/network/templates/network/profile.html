@@ -3,37 +3,40 @@
 
 {% block body %}
     <div class="userinfowrap" id="user-{{profile.id}}">
-        <h2>
-            <span class="profile-display-name">{{ profile.display_name }}</span>
-            {% if profile != request.user %}
-                <button class="btn follow-btn" id="follow-btn-{{profile.id}}"></button>
-            {% else %}
-                <a href="{% url 'editprofile' username=user.username %}" class="btn btn-outline-primary profile-edit-btn" id="profile-edit-btn-{{profile.id}}">Edit Profile</a>
-            {% endif %}
-        </h2> 
-        <div class="username">@{{ profile.username }}</div><br>
-        <div class="info">
-            <div class="birthday">
-                {% if today.month == profile.date_of_birth.month and today.day == profile.date_of_birth.day %}
-                    {% if profile != request.user %}
-                        <strong>🎉 Today is {{profile.display_name}}'s birthday!</strong>
-                    {% else %}
-                        <strong>🎉 Happy Birthday, {{profile.display_name}}!</strong>
-                    {% endif %}
+        <img class="profile-img" src="{{profile.profile_img.url}}">
+        <span class="userinfo">
+            <h2>
+                <span class="profile-display-name">{{ profile.display_name }}</span>
+                {% if profile != request.user %}
+                    <button class="btn follow-btn" id="follow-btn-{{profile.id}}"></button>
+                {% else %}
+                    <a href="{% url 'editprofile' username=user.username %}" class="btn btn-outline-primary profile-edit-btn" id="profile-edit-btn-{{profile.id}}">Edit Profile</a>
                 {% endif %}
-            </div>
-            {% if profile.about %}
-                <div class="about">
-                    {{ profile.about }}
+            </h2> 
+            <div class="username">@{{ profile.username }}</div><br>
+            <div class="info">
+                <div class="birthday">
+                    {% if today.month == profile.date_of_birth.month and today.day == profile.date_of_birth.day %}
+                        {% if profile != request.user %}
+                            <strong>🎉 Today is {{profile.display_name}}'s birthday!</strong>
+                        {% else %}
+                            <strong>🎉 Happy Birthday, {{profile.display_name}}!</strong>
+                        {% endif %}
+                    {% endif %}
                 </div>
-            {% endif %}
-            <span class="followings">
-                <strong>{{ profile.followings.count }}</strong> following
-            </span>
-            <span class="followers">
-                <strong>{{ profile.followers.count }}</strong> follower
-            </span>
-        </div>
+                {% if profile.about %}
+                    <div class="about">
+                        {{ profile.about }}
+                    </div>
+                {% endif %}
+                <span class="followings">
+                    <strong>{{ profile.followings.count }}</strong> following
+                </span>
+                <span class="followers">
+                    <strong>{{ profile.followers.count }}</strong> follower
+                </span>
+            </div>
+        </span>
     </div>
 
     {% if message %}
@@ -46,15 +49,15 @@
 
     {% for post in page_obj %}
         <div class="postwrap">
-            {% include "network/postblock.html" with post=post %}
+            {% include "network/postblock.html" with post=post page_rendering="profile" %}
 
             <div class="commentblock" id="commentblock-{{post.id}}">
                 <div class="showcomment">
-                    {% include "network/addcomment.html" %}
+                    {% include "network/addcomment.html" with page_rendering="profile" %}
                     {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
                         <span class="commentwrap">
                             <hr>
-                            {% include "network/commentblock.html" with comment=comment %}
+                            {% include "network/commentblock.html" with comment=comment page_rendering="profile" %}
                         </span>
                     {% endfor %}
                 </div>
@@ -62,7 +65,7 @@
         </div>
     {% endfor %}
 
-    {% include "network/pagination.html" with page_obj=page_obj%}
+    {% include "network/pagination.html" with page_obj=page_obj %}
 {% endblock %}
 
 {% block script %}

@@ -1,13 +1,23 @@
 <div class="showcomment">
-    <a class="user-direct" href="{% url 'profile' username=comment.owner.username %}">
-        <div class="display_name">{{ comment.owner.display_name }}</div>
-        <div class="username">@{{ comment.owner.username }}</div><br>
-    </a>
+    <div class="showcomment-grid">
+        <img src="{{comment.owner.profile_img.url}}" class="showcomment-profile-img">
+        <div class="showcomment-info">
+            <a class="user-direct" href="{% url 'profile' username=comment.owner.username %}">
+                <div class="display_name">{{ comment.owner.display_name }}</div>
+                <div class="username">@{{ comment.owner.username }}</div><br>
+            </a>
+
+            <div class="timestamp comment-hide-when-edit-{{comment.id}}" id="comment-timestamp-{{comment.id}}">
+                {{ comment.timestamp }}
+            </div>
+        </div>
+    </div>
 
     <div class="comment edittext comment-show-when-edit-{{comment.id}}" id="comment-edittext-{{comment.id}}">
         <form class="comment form-group form-edit-comment" action="{% url 'editcomment' comment_id=comment.id %}" method="post">
             {% csrf_token %}
             <textarea class="comment form-control form-editcomment-text" name="edit_comment_text" rows="2">{{comment.text}}</textarea>
+            <input type="hidden" name="page_rendering" value="{{page_rendering}}">
             <div class = "comment editing-btns">
                 <input class="comment btn btn-sm btn-primary edit-comment-btn comment-edit-submit-btn" type="submit" value="Submit">
                 <button class="comment btn btn-sm btn-outline-primary edit-cancel-btn comment-edit-cancel-btn" id="comment-edit-cancel-btn-{{comment.id}}" type="button">Cancel</button>
@@ -15,22 +25,20 @@
         </form>
     </div>
 
-    <div class="text comment-hide-when-edit-{{comment.id}}" id="comment-text-{{comment.id}}">
+    <div class="text commenttext comment-hide-when-edit-{{comment.id}}" id="comment-text-{{comment.id}}">
         {{ comment.text }}
     </div>
 
     <div class="edittext" id="comment-edittext-{{comment.id}}">
     </div>
 
-    <div class="timestamp comment-hide-when-edit-{{comment.id}}" id="comment-timestamp-{{comment.id}}">
-        {{ comment.timestamp }}
-    </div>
-
     <div class="like-comment-edit-btn" id="comment-btns-{{comment.id}}">
         {% csrf_token %}
         <button class="btn btn-sm btn-outline-primary comment-like-btn like-btn comment-hide-when-edit-{{comment.id}}" id="comment-like-btn-{{comment.id}}">Like</button>
         {% if comment.owner == request.user %}
-            <div></div> 
+            <div></div>
+            <div></div>
+            <button class="btn btn-sm btn-outline-danger comment-remove-btn comment-hide-when-edit-{{comment.id}}" id="comment-remove-btn-{{comment.id}}">Remove</button>
             <button class="btn btn-sm btn-outline-primary comment-edit-btn edit-btn comment-hide-when-edit-{{comment.id}}" id="comment-edit-btn-{{comment.id}}">Edit</button>
         {% endif %}
     </div>

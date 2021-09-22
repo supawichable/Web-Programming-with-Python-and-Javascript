@@ -14,15 +14,15 @@
 
     {% for post in page_obj %}
         <div class="postwrap">
-            {% include "network/postblock.html" with post=post %}
+            {% include "network/postblock.html" with post=post page_rendering="following" %}
 
             <div class="commentblock" id="commentblock-{{post.id}}">
                 <div class="showcomment">
-                    {% include "network/addcomment.html" %}
+                    {% include "network/addcomment.html" with page_rendering="following" %}
                     {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
                         <span class="commentwrap">
                             <hr>
-                            {% include "network/commentblock.html" with comment=comment %}
+                            {% include "network/commentblock.html" with comment=comment page_rendering="following" %}
                         </span>
                     {% endfor %}
                 </div>

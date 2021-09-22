@@ -4,5 +4,6 @@
         {% csrf_token %}
         <textarea class="form-control form-newpost-text" name="post_text" rows="4"></textarea>
         <input class="btn btn-primary form-newpost-submit" type="submit" value="Post">
+        <input type="hidden" name="page_rendering" value="{{page_rendering}}">
     </form>
 </div> 

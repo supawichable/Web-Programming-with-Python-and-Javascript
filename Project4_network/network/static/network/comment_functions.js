@@ -102,3 +102,21 @@ function cancelEditCommentControl(comment) {
         });
     }
 }
+
+function removeCommentControl(comment){
+    const element = comment.querySelector('.comment-remove-btn');
+    if (element) {
+        element.addEventListener('click', (event) => {
+            comment.remove();
+            const element_id = parseInt(element.id.substring(19));
+            const csrftoken = getCookie('csrftoken');
+            fetch(`/comment_interact/${element_id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    remove:true
+                }),
+                headers: {"X-CSRFToken": csrftoken}
+            });
+        });
+    }
+}

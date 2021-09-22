@@ -12,44 +12,48 @@ from datetime import date
 from .models import *
 
 def index(request):
-    return paginator(request)
+    return paginator(request, "index")
 
 @login_required
 def addpost(request):
     if request.method == "POST":
+        page_rendering = request.POST["page_rendering"]
         if 'post_text' in request.POST:
             post_text = request.POST["post_text"]
             post = Post(text=post_text, owner=request.user)
             post.save()
-    return paginator(request)
+    return paginator(request, page_rendering, username=request.user.username) 
 
 @login_required
-def comment(request, post_id):
+def addcomment(request, post_id):
     if request.method == "POST":
+        page_rendering = request.POST["page_rendering"]
         if 'comment_text' in request.POST:
             comment_text = request.POST["comment_text"]
             comment_post = Post.objects.get(pk=post_id)
             comment = Comment(text=comment_text, owner=request.user, post=comment_post)
             comment.save()
-    return paginator(request)
+    return paginator(request, page_rendering, username=request.user.username)
 
 @login_required
 def editpost(request, post_id):
     if request.method == "POST":
+        page_rendering = request.POST["page_rendering"]
         if 'edit_post_text' in request.POST:
             edittext = request.POST['edit_post_text']
             Post.objects.filter(pk=post_id).update(text=edittext)
-    return paginator(request)
+    return paginator(request, page_rendering, username=request.user.username)
 
 @login_required
 def editcomment(request, comment_id):
     if request.method == "POST":
+        page_rendering = request.POST["page_rendering"]
         if 'edit_comment_text' in request.POST:
             edittext = request.POST['edit_comment_text']
             Comment.objects.filter(pk=comment_id).update(text=edittext)
-    return paginator(request)
+    return paginator(request, page_rendering, username=request.user.username)
 
-def paginator(request):
+def index_paginator(request):
     posts = Post.objects.all()
     paginator = Paginator(posts.order_by('-timestamp'), 10)
     page_number = request.GET.get('page')
@@ -58,12 +62,56 @@ def paginator(request):
         return render(request, "network/index.html", {
             "page_obj" : page_obj,
             "user": request.user,
-            "message": "There is no post yet."
+            "message": "There is no post yet.",
         })
     return render(request, "network/index.html", {
         "page_obj" : page_obj,
         "user": request.user
     })
+
+def following_paginator(request):
+    posts = Post.objects.filter(owner__in = request.user.followings.all()).order_by('-timestamp')
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    if list(posts) == []:
+        return render(request, "network/following.html", {
+            "page_obj" : page_obj,
+            "message": "There is no post yet."
+        })
+    return render(request, "network/following.html", {
+        "page_obj" : page_obj
+    })
+
+def profile_paginator(request, username):
+    user_profile = CustomUser.objects.get(username=username)
+    # paginator = Paginator(Post.objects.all().order_by('-timestamp'), 10)
+    posts = user_profile.posted.all().order_by('-timestamp')
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    print(list(posts.all()))
+    if list(posts.all()) == []:
+        return render(request, "network/profile.html", {
+        "profile": user_profile,
+        "page_obj": page_obj,
+        "message": "{} has no post yet.".format(user_profile.display_name),
+        "today": date.today()
+    })
+    return render(request, "network/profile.html", {
+        "profile": user_profile,
+        "page_obj": page_obj,
+        "today": date.today()
+    })
+
+def paginator(request, page_rendering, username=None):
+    if page_rendering == "index":
+        return index_paginator(request)
+    elif page_rendering == "following":
+        return following_paginator(request)
+    elif page_rendering == "profile":
+        print(username)
+        return profile_paginator(request, username)
 
 def login_view(request):
     next = ""
@@ -132,43 +180,16 @@ def register(request):
 
 @login_required
 def following(request):
+    page_rendering = "following"
     if request.method == "POST":
         post_text = request.POST["post_text"]
         post = Post(text = post_text, owner =request.user)
         post.save()
-    posts = Post.objects.filter(owner__in = request.user.followings.all()).order_by('-timestamp')
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    if list(posts) == []:
-        return render(request, "network/following.html", {
-            "page_obj" : page_obj,
-            "message": "There is no post yet."
-        })
-    return render(request, "network/following.html", {
-        "page_obj" : page_obj
-    })
+    return paginator(request, page_rendering)
 
 def profile(request, username):
-    user_profile = CustomUser.objects.get(username=username)
-    # paginator = Paginator(Post.objects.all().order_by('-timestamp'), 10)
-    posts = user_profile.posted.all().order_by('-timestamp')
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    print(list(posts.all()))
-    if list(posts.all()) == []:
-        return render(request, "network/profile.html", {
-        "profile": user_profile,
-        "page_obj": page_obj,
-        "message": "{} has no post yet.".format(user_profile.display_name),
-        "today": date.today()
-    })
-    return render(request, "network/profile.html", {
-        "profile": user_profile,
-        "page_obj": page_obj,
-        "today": date.today()
-    })
+    page_rendering = "profile"
+    return paginator(request, page_rendering, username)
 
 def editprofile(request, username):
     user_profile = CustomUser.objects.get(username=username)
@@ -324,9 +345,12 @@ def comment_interact(request, comment_id):
         data = json.loads(request.body)
         if data.get("like") == True:
             comment.liked_by.add(request.user)
+            comment.save()
         if data.get("like") == False:
             comment.liked_by.remove(request.user)
-        comment.save()
+            comment.save()
+        if data.get("remove") == True:
+            comment.delete()
         return HttpResponse(status=204)
     
     else:

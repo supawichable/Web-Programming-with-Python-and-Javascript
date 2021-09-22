@@ -26,7 +26,6 @@ function likePostControl(post) {
         console.log("user not logged in");
     });
 
-    // const element = post.querySelector(".like-btn");
     // handle like post
     element.addEventListener('click', (event) => {
         const type = "post";
@@ -91,7 +90,6 @@ function likePostControl(post) {
         });
     });
 
-    // const element = post.querySelector(".like-btn");
     // handle like post
     element.addEventListener('click', (event) => {
         const type = "post";
@@ -112,20 +110,42 @@ function likePostControl(post) {
 function commentPostControl(post) {
     // hide all comments
     var commentblock = post.querySelector(".commentblock");
-    commentblock.style.display = "none";
-    const element = post.querySelector(".comment-btn");
-    element.addEventListener('click', (event) => {
-        const post_id = parseInt(element.id.substring(12));
+    var comment_btn = post.querySelector(".comment-btn");
+    const post_id = parseInt(comment_btn.id.substring(12));
+
+    if (!localStorage.getItem(`comment_btn_status_${post_id}`)) {
+        localStorage.setItem(`comment_btn_status_${post_id}`, 0);
+        comment_btn.classList.add('btn-outline-primary');
+        comment_btn.innerHTML = "▼ Comment";
+    }
+    
+    var comment_btn_status = parseInt(localStorage.getItem(`comment_btn_status_${post_id}`));
+
+    if (comment_btn_status == 0) {
+        comment_btn.classList.add('btn-outline-primary');
+        comment_btn.innerHTML = "▼ Comment";
+        commentblock.style.display = "none";
+    } else {
+        comment_btn.click();
+        comment_btn.classList.add('btn-primary');
+        comment_btn.innerHTML = "▲ Comment";
+        commentblock.style.display = "block";
+    }
+
+    comment_btn.addEventListener('click', (event) => {
+        const post_id = parseInt(comment_btn.id.substring(12));
         commentblock = document.querySelector(`#commentblock-${post_id}`);
         
-        if (element.classList.contains('btn-outline-primary')) {
+        if (comment_btn.classList.contains('btn-outline-primary')) {
             commentblock.style.display = "block";
-            element.className = `btn btn-sm btn-primary comment-btn`;
-            element.innerHTML = "▲ Comment";
-        } else if(element.classList.contains('btn-primary')) {
+            comment_btn.className = `btn btn-sm btn-primary comment-btn`;
+            comment_btn.innerHTML = "▲ Comment";
+            localStorage.setItem(`comment_btn_status_${post_id}`, 1);
+        } else if(comment_btn.classList.contains('btn-primary')) {
             commentblock.style.display = "none";
-            element.className = `btn btn-sm btn-outline-primary comment-btn`;
-            element.innerHTML = "▼ Comment";
+            comment_btn.className = `btn btn-sm btn-outline-primary comment-btn`;
+            comment_btn.innerHTML = "▼ Comment";
+            localStorage.setItem(`comment_btn_status_${post_id}`, 0);
         }
     });
 }

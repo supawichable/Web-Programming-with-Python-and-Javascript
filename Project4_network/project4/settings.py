@@ -120,8 +120,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'network/static/images')
+
+PROFILE_IMG_URL = '/images/profile_img'
+
+PROFILE_IMG_ROOT = os.path.join(MEDIA_ROOT, 'profile_img')
+
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 
-# DATE_INPUT_FORMATS = ['%d-%m-%Y']
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
