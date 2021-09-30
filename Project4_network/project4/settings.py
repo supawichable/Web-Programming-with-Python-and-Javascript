@@ -121,15 +121,23 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'network/static/images')
 
 PROFILE_IMG_URL = '/images/profile_img'
-
 PROFILE_IMG_ROOT = os.path.join(MEDIA_ROOT, 'profile_img')
+
+COMMENT_IMG_URL = '/images/comment_img'
+COMMENT_IMG_ROOT = os.path.join(MEDIA_ROOT, 'comment_img')
+
+POST_IMG_URL = '/images/post_img'
+POST_IMG_ROOT = os.path.join(MEDIA_ROOT, 'post_img')
+
+DEFAULT_PROFILE = "/profile_img/default1.jpg"
 
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
+
+UPLOAD_SIZE_LIMIT = 1024 * 1024 * 12

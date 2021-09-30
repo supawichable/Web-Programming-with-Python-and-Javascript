@@ -1,63 +1,92 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     <h2>Register</h2>
     {% if message %}
-        <div><strong>{{ message }}</strong></div>
+        <div class="message"><strong>{{ message }}</strong></div>
     {% endif %}
     <div class="register-fields">
-        <form action="{% url 'register' %}" method="post">
+        <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <input class="form-control register" type="text" id="display_name" name="display_name" placeholder="Display Name" required>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">@</div>
-                        </div>
-                        <input class="form-control register" type="text" id="username" name="username" placeholder="Username" aria-describedby="inputGroupPrepend" required>
+            <div class="register-grid">
+                <div class="profile-img-wrap">
+                    <div class="form-group row">
+                        <span class="upload-grid">
+                            <label for="upload-profile-img">
+                                <div id="preview">
+                                    <img src="static/images/profile_img/default1.jpg">
+                                </div>
+                            </label>
+                            <input class="form-control"
+                                   type="file" 
+                                   id="upload-profile-img"
+                                   name="profile_img" 
+                                   placeholder="Upload Profile" 
+                                   accept="image/*">
+                            <input type="button" id="clear-button" class="btn btn-outline-danger" value="Clear Upload">
+                        </span>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <input class="form-control register" type="email" id="email" name="email" placeholder="Email Address" required>
-                </div>
-            </div>
+                <div class="fields">
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <input class="form-control register" type="text" id="display_name" name="display_name" placeholder="Display Name" required>
+                        </div>
+                    </div>
 
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <input class="form-control register" type="text" onfocus="(this.type='date')" name="date_of_birth" id="date_of_birth" placeholder="Date of Birth">
-                </div>
-            </div>
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">@</div>
+                                </div>
+                                <input class="form-control register" type="text" id="username" name="username" placeholder="Username" aria-describedby="inputGroupPrepend" required>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <textarea rows="4" class="form-control register" type="text" id="about" name="about" placeholder="About"></textarea>
-                </div>
-            </div>
-            
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <input class="form-control register" type="password" id="password" name="password" placeholder="Password">
-                </div>
-            </div>
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <input class="form-control register" type="email" id="email" name="email" placeholder="Email Address" required>
+                        </div>
+                    </div>
 
-            <div class="form-group row">
-                <div class="col-sm-4">
-                    <input class="form-control register" type="password" id="confirmation" name="confirmation" placeholder="Confirm Password">
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <input class="form-control register" type="text" onfocus="(this.type='date')" name="date_of_birth" id="date_of_birth" placeholder="Date of Birth">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <textarea rows="4" class="form-control register" type="text" id="about" name="about" placeholder="About"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <input class="form-control register" type="password" id="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <input class="form-control register" type="password" id="confirmation" name="confirmation" placeholder="Confirm Password">
+                        </div>
+                    </div>
+                    <input class="btn btn-primary register-btn" type="submit" value="Register"><br>
+                    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
                 </div>
             </div>
-            <input class="btn btn-primary register-btn" type="submit" value="Register">
         </form>
     </div>
 
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/register.js' %}"></script>
+    <script src="{% static 'network/photoupload_functions.js' %}"></script>
 {% endblock %}

@@ -1,13 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     renderNewPostSection();
     newPostControl();
+    photoUpload_addPost();
+    
 
     document.querySelectorAll(".postwrap").forEach((post) => {
         likePostControl(post);
-        commentPostControl(post);
         editPostControl(post);
         cancelEditPostControl(post);
-        removePostControl(post);
+        index_removePostControl(post);
+        // photoUpload_editPost(post);
+    });
+
+    document.querySelectorAll(".newcomment").forEach((newcomment) => {
+        photoUpload_addComment(newcomment);
     });
 
     document.querySelectorAll(".commentwrap").forEach((comment) => {
@@ -15,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         editCommentControl(comment);
         cancelEditCommentControl(comment);
         removeCommentControl(comment);
+        photoUpload_editComment(comment);
+        removePhoto_editComment(comment);
     });
 
 });

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll(".postwrap").forEach((post) => {
         likePostControl_unauth(post)
-        commentPostControl(post);
+        resetState_commentPostControl(post);
         editPostControl(post);
     });
 

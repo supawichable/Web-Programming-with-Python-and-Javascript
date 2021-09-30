@@ -3,14 +3,20 @@
 
 {% block body %}
     <div class="userinfowrap" id="user-{{profile.id}}">
-        <img class="profile-img" src="{{profile.profile_img.url}}">
+        <a href="{{profile.profile_img.url}}">
+            <img class="profile-img" src="{{profile.profile_img.url}}">
+        </a>
         <span class="userinfo">
             <h2>
-                <span class="profile-display-name">{{ profile.display_name }}</span>
-                {% if profile != request.user %}
-                    <button class="btn follow-btn" id="follow-btn-{{profile.id}}"></button>
-                {% else %}
-                    <a href="{% url 'editprofile' username=user.username %}" class="btn btn-outline-primary profile-edit-btn" id="profile-edit-btn-{{profile.id}}">Edit Profile</a>
+                <span class="profile-display-name">
+                    {{ profile.display_name }}
+                </span>
+                {% if request.user.is_authenticated %}
+                    {% if profile != request.user %}
+                        <button class="btn follow-btn" id="follow-btn-{{profile.id}}"></button>
+                    {% else %}
+                        <a href="{% url 'editprofile' username=user.username %}" class="btn btn-outline-primary profile-edit-btn" id="profile-edit-btn-{{profile.id}}">Edit Profile</a>
+                    {% endif %}
                 {% endif %}
             </h2> 
             <div class="username">@{{ profile.username }}</div><br>
@@ -18,9 +24,9 @@
                 <div class="birthday">
                     {% if today.month == profile.date_of_birth.month and today.day == profile.date_of_birth.day %}
                         {% if profile != request.user %}
-                            <strong>🎉 Today is {{profile.display_name}}'s birthday!</strong>
+                            <strong>🎂 Today is {{profile.display_name}}'s birthday!</strong>
                         {% else %}
-                            <strong>🎉 Happy Birthday, {{profile.display_name}}!</strong>
+                            <strong>🎂 Happy Birthday, {{profile.display_name}}!</strong>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -29,11 +35,66 @@
                         {{ profile.about }}
                     </div>
                 {% endif %}
-                <span class="followings">
-                    <strong>{{ profile.followings.count }}</strong> following
+                <span class="dropdown" id="dropdown-following">
+                    <span class="dropdown-btn followings dropdown" id="dropdown-btn-following" type="button">
+                        <strong>{{ profile.followings.count }}</strong> following
+                    </span>
+                    <span class="dropdown-content dropdown" id="dropdown-content-following">
+                        {% for following in profile.followings.all %}
+                            <a href="{% url 'profile' username=following.username %}">
+                                <div class="grid-col-1">
+                                    <img class="follow-profile-img" src="{{following.profile_img.url}}">
+                                </div>
+                                <div class="grid-col-2">
+                                    <div>
+                                        <strong>{{following.display_name}}</strong>
+                                    </div>
+                                    <div>
+                                        @{{following.username}}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                        </span>
                 </span>
-                <span class="followers">
-                    <strong>{{ profile.followers.count }}</strong> follower
+                <span class="dropdown" id="dropdown-follower">
+                    <span class="dropdown-btn followers dropdown" dropdown id="dropdown-btn-follower" type="button">
+                        <strong>{{ profile.followers.count }}</strong> follower
+                    </span>
+                    <span class="dropdown-content dropdown" id="dropdown-content-follower">
+                        {% for follower in profile.followers.all %}
+                            <a href="{% url 'profile' username=follower.username %}">
+                                <div class="grid-col-1">
+                                    <img class="follow-profile-img" src="{{follower.profile_img.url}}">
+                                </div>
+                                <div class="grid-col-2">
+                                    <div>
+                                        <strong>{{follower.display_name}}</strong>
+                                    </div>
+                                    <div>
+                                        @{{follower.username}}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                        {% if user.is_authenticated %}
+                            <span class="dropdown-follower-self">
+                                <a href="{% url 'profile' username=user.username %}">
+                                    <div class="grid-col-1">
+                                        <img class="follow-profile-img" src="{{user.profile_img.url}}">
+                                    </div>
+                                    <div class="grid-col-2">
+                                        <div>
+                                            <strong>{{user.display_name}}</strong>
+                                        </div>
+                                        <div>
+                                            @{{user.username}}
+                                        </div>
+                                    </div>
+                                </a>
+                            </span>
+                        {% endif %}
+                    </span>
                 </span>
             </div>
         </span>
@@ -46,16 +107,20 @@
             <hr>
         </div>
     {% endif %}
-
+    <br>
     {% for post in page_obj %}
-        <div class="postwrap">
+        <div class="postwrap" id="postwrap-{{post.id}}">
             {% include "network/postblock.html" with post=post page_rendering="profile" %}
 
             <div class="commentblock" id="commentblock-{{post.id}}">
                 <div class="showcomment">
-                    {% include "network/addcomment.html" with page_rendering="profile" %}
+                    {% if user.is_authenticated %}
+                        {% include "network/addcomment.html" with page_rendering="profile" page_number=page_obj.number %}
+                    {% else %}
+                        {% include "network/addcomment_unauth.html" %}
+                    {% endif %}
                     {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
-                        <span class="commentwrap">
+                        <span class="commentwrap" id="commentwrap-{{comment.id}}">
                             <hr>
                             {% include "network/commentblock.html" with comment=comment page_rendering="profile" %}
                         </span>
@@ -73,5 +138,15 @@
     <script src="{% static 'network/post_functions.js' %}"></script>
     <script src="{% static 'network/comment_functions.js' %}"></script>
     <script src="{% static 'network/follow_functions.js' %}"></script>
-    <script src="{% static 'network/profile.js' %}"></script>
-{% endblock %}
+    <script src="{% static 'network/photoupload_functions.js' %}"></script>
+    {% if user.is_authenticated %}
+        <script src="{% static 'network/profile.js' %}"></script>
+        {% if action == "addcomment" or action == "editcomment" %}
+            <script src="{% static 'network/commentbtn_functions_savestate.js' %}"></script>
+        {% else %}
+            <script src="{% static 'network/commentbtn_functions_resetstate.js' %}"></script>
+        {% endif %}
+    {% else %}
+        <script src="{% static 'network/profile_unauth.js' %}"></script>
+    {% endif %}
+{% endblock %}</a>

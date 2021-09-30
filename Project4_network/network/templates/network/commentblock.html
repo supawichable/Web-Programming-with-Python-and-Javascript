@@ -1,6 +1,8 @@
 <div class="showcomment">
     <div class="showcomment-grid">
-        <img src="{{comment.owner.profile_img.url}}" class="showcomment-profile-img">
+        <a class="user-direct" href="{% url 'profile' username=comment.owner.username %}">
+            <img src="{{comment.owner.profile_img.url}}" class="showcomment-profile-img">
+        </a>
         <div class="showcomment-info">
             <a class="user-direct" href="{% url 'profile' username=comment.owner.username %}">
                 <div class="display_name">{{ comment.owner.display_name }}</div>
@@ -10,36 +12,67 @@
             <div class="timestamp comment-hide-when-edit-{{comment.id}}" id="comment-timestamp-{{comment.id}}">
                 {{ comment.timestamp }}
             </div>
-        </div>
-    </div>
 
-    <div class="comment edittext comment-show-when-edit-{{comment.id}}" id="comment-edittext-{{comment.id}}">
-        <form class="comment form-group form-edit-comment" action="{% url 'editcomment' comment_id=comment.id %}" method="post">
-            {% csrf_token %}
-            <textarea class="comment form-control form-editcomment-text" name="edit_comment_text" rows="2">{{comment.text}}</textarea>
-            <input type="hidden" name="page_rendering" value="{{page_rendering}}">
-            <div class = "comment editing-btns">
-                <input class="comment btn btn-sm btn-primary edit-comment-btn comment-edit-submit-btn" type="submit" value="Submit">
-                <button class="comment btn btn-sm btn-outline-primary edit-cancel-btn comment-edit-cancel-btn" id="comment-edit-cancel-btn-{{comment.id}}" type="button">Cancel</button>
+            <div class="comment edittext comment-show-when-edit-{{comment.id}}" id="comment-edittext-{{comment.id}}">
+                <form class="comment form-group form-editcomment" action="{% url 'editcomment' comment_id=comment.id %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <textarea class="comment form-control form-editcomment-text" name="edit_comment_text" rows="2">{{comment.text}}</textarea>
+                    <div class="comment-img-wrap" id="comment-img-wrap-{{comment.id}}">
+                        <!-- {% if comment.comment_image.all %} -->
+                            <!-- {% with image=comment.comment_image.all.0 %} -->
+                                <!-- <img class="comment-img" id="comment-img-{{comment.id}}" src="{{ image.image.url }}"> -->
+                            <!-- {% endwith %} -->
+                        <!-- {% endif %} -->
+                    </div>
+                    <div class="form-editcomment-btns">
+                        <input class="comment btn btn-sm btn-primary edit-comment-btn comment-edit-submit-btn" type="submit" value="Submit">
+                        <button class="comment btn btn-sm btn-outline-primary edit-cancel-btn comment-edit-cancel-btn" id="comment-edit-cancel-btn-{{comment.id}}" type="button">Cancel</button>
+                        <div></div>
+                        <label for="upload-img-editcomment-{{comment.id}}">
+                            <div id="addphotos-btn" class="btn btn-outline-primary">
+                                Add Photos
+                            </div>
+                        </label>
+                        <input class="form-control upload-img-editcomment" 
+                            type="file" 
+                            id="upload-img-editcomment-{{comment.id}}"
+                            name="addphotos"
+                            accept="image/*">
+                    </div>
+                    <div class="hidden-fields">
+                        <input type="hidden" name="page_rendering" value="{{page_rendering}}">
+                        <input type="hidden" name="page_number" value="{{page_number}}">
+                        <input type="hidden" id="status-{{comment.id}}" name="status" value="unchanged">
+                    </div>
+                </form>
             </div>
-        </form>
+        
+        </div>
     </div>
 
     <div class="text commenttext comment-hide-when-edit-{{comment.id}}" id="comment-text-{{comment.id}}">
         {{ comment.text }}
     </div>
 
+    {% if comment.comment_image.all %}
+        {% with image=comment.comment_image.all.0 %}
+            <a href={{image.image.url}}>
+                <img class="comment-img comment-hide-when-edit-{{comment.id}}" src="{{ image.image.url }}">
+            </a>
+        {% endwith %}
+    {% endif %}
+
     <div class="edittext" id="comment-edittext-{{comment.id}}">
     </div>
 
-    <div class="like-comment-edit-btn" id="comment-btns-{{comment.id}}">
+    <div class="like-comment-edit-btn comment" id="comment-btns-{{comment.id}}">
         {% csrf_token %}
         <button class="btn btn-sm btn-outline-primary comment-like-btn like-btn comment-hide-when-edit-{{comment.id}}" id="comment-like-btn-{{comment.id}}">Like</button>
         {% if comment.owner == request.user %}
             <div></div>
             <div></div>
             <button class="btn btn-sm btn-outline-danger comment-remove-btn comment-hide-when-edit-{{comment.id}}" id="comment-remove-btn-{{comment.id}}">Remove</button>
-            <button class="btn btn-sm btn-outline-primary comment-edit-btn edit-btn comment-hide-when-edit-{{comment.id}}" id="comment-edit-btn-{{comment.id}}">Edit</button>
+            <button class="btn btn-sm btn-outline-primary comment-edit-btn comment-hide-when-edit-{{comment.id}}" id="comment-edit-btn-{{comment.id}}">Edit</button>
         {% endif %}
     </div>
 

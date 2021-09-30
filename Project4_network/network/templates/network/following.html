@@ -20,7 +20,7 @@
                 <div class="showcomment">
                     {% include "network/addcomment.html" with page_rendering="following" %}
                     {% for comment in post.comments.all|dictsortreversed:"timestamp" %}
-                        <span class="commentwrap">
+                        <span class="commentwrap" id="commentwrap-{{comment.id}}">
                             <hr>
                             {% include "network/commentblock.html" with comment=comment page_rendering="following" %}
                         </span>
@@ -39,5 +39,12 @@
     <!-- <script src="{% static 'network/newpost_functions.js' %}"></script>  -->
     <script src="{% static 'network/post_functions.js' %}"></script>
     <script src="{% static 'network/comment_functions.js' %}"></script>
+    <script src="{% static 'network/photoupload_functions.js' %}"></script>
     <script src="{% static 'network/following.js' %}"></script>
+
+    {% if action == "addcomment" or action == "editcomment" %}
+        <script src="{% static 'network/commentbtn_functions_savestate.js' %}"></script>
+    {% else %}
+        <script src="{% static 'network/commentbtn_functions_resetstate.js' %}"></script>
+    {% endif %}
 {% endblock %}

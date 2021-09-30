@@ -6,66 +6,98 @@
     {% if message %}
         <div><strong>{{ message }}</strong></div>
     {% endif %}
-    <form action="{% url 'editprofile' username=profile.username %}" method="post">
+    <form action="{% url 'editprofile' username=profile.username %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group row">
-            <label for="display_name" class="col-sm-2 col-form-label">Display Name</label>
-            <div class="col-sm-4">
-                <input class="form-control editprofile" type="text" id="display_name" name="display_name" placeholder="Display Name" value={{profile.display_name}}>
+        <div class="editprofile-grid">
+            <div class="profile-img-wrap">
+                <div class="form-group row">
+                    <span class="upload-grid">
+                        <label for="upload-profile-img">
+                            <div id="preview">
+                                <img src="{{profile.profile_img.url}}">
+                            </div>
+                        </label>
+                        <input class="form-control"
+                            type="file" 
+                            id="upload-profile-img"
+                            name="profile_img" 
+                            placeholder="Upload Profile" 
+                            accept="image/*">
+                        <input type="hidden" id="status" name="status" value="unchanged">
+                        <div class="clear-revert-buttons">
+                            <input type="button" id="clear-button" class="btn btn-outline-danger" value="Clear">
+                            <input type="button" id="revert-button" class="btn btn-outline-primary" value="Revert">
+                        </div>
+                    </span>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="username" class="col-sm-2 col-form-label">Username</label>
-            <div class="col-sm-4">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">@</div>
+            <div class="editprofile-fields">
+                <div class="form-group row">
+                    <label for="display_name">Display Name</label>
+                    <div class="col-sm-4">
+                        <input class="form-control editprofile" type="text" id="display_name" name="display_name" placeholder="Display Name" value={{profile.display_name}}>
                     </div>
-                    <input class="form-control editprofile" type="text" id="username" name="username" placeholder="@username" value={{profile.username}}>
+                </div>
+
+                <div class="form-group row">
+                    <label for="username" >Username</label>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">@</div>
+                            </div>
+                            <input class="form-control editprofile" type="text" id="username" name="username" placeholder="@username" value={{profile.username}}>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="email">Email</label>
+                    <div class="col-sm-4">
+                        <input class="form-control editprofile" type="email" id="email" name="email" placeholder="Email Address" value={{profile.email}}>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <div class="col-sm-4">
+                        <!-- <input class="form-control editprofile" type="date" id="date_of_birth" name="date_of_birth" placeholder="Date of Birth" value='1998-07-17'> -->
+                        <input class="form-control editprofile" type="date" id="date_of_birth" name="date_of_birth" placeholder="Date of Birth" value={{date_of_birth}}>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="about">About</label>
+                    <div class="col-sm-4">
+                        <textarea rows="4" class="form-control editprofile" type="text" id="about" name="about" placeholder="About">{{profile.about}}</textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="password">Password</label>
+                    <div class="col-sm-4">
+                        <input class="form-control editprofile" type="password" id="password" name="password" placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="confirmation">Confirm Password</label>
+                    <div class="col-sm-4">
+                        <input class="form-control editprofile" type="password" id="confirmation" name="confirmation" placeholder="Confirm Password">
+                    </div>
+                </div>
+
+                <div class="editprofile-btns">
+                    <input type="submit" class="btn btn-primary" value="Update Profile">
+                    <a href="{% url 'profile' username=profile.username %}" class="btn btn-outline-primary">Cancel</a>
                 </div>
             </div>
         </div>
-
-        <div class="form-group row">
-            <label for="email" class="col-sm-2 col-form-label">Email</label>
-            <div class="col-sm-4">
-                <input class="form-control editprofile" type="email" id="email" name="email" placeholder="Email Address" value={{profile.email}}>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="date_of_birth" class="col-sm-2 col-form-label">Date of Birth</label>
-            <div class="col-sm-4">
-                <!-- <input class="form-control editprofile" type="date" id="date_of_birth" name="date_of_birth" placeholder="Date of Birth" value='1998-07-17'> -->
-                <input class="form-control editprofile" type="date" id="date_of_birth" name="date_of_birth" placeholder="Date of Birth" value={{date_of_birth}}>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="about" class="col-sm-2 col-form-label">About</label>
-            <div class="col-sm-4">
-                <textarea rows="4" class="form-control editprofile" type="text" id="about" name="about" placeholder="About">{{profile.about}}</textarea>
-            </div>
-        </div>
-        
-        <div class="form-group row">
-            <label for="password" class="col-sm-2 col-form-label">Password</label>
-            <div class="col-sm-4">
-                <input class="form-control editprofile" type="password" id="password" name="password" placeholder="Password">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="confirmation" class="col-sm-2 col-form-label">Confirm Password</label>
-            <div class="col-sm-4">
-                <input class="form-control editprofile" type="password" id="confirmation" name="confirmation" placeholder="Confirm Password">
-            </div>
-        </div>
-
-        <div class="editprofile-btns">
-            <input type="submit" class="btn btn-primary" value="Update Profile">
-            <a href="{% url 'profile' username=profile.username %}" class="btn btn-outline-primary">Cancel</a>
-        </div>
     </form>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/editprofile.js' %}"></script>
+    <script src="{% static 'network/photoupload_functions.js' %}"></script>
 {% endblock %}

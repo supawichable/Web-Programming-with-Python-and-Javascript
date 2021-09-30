@@ -1,9 +1,25 @@
-<div id="newcomment">
-    <form class="form-group form-newcomment" action="{% url 'addcomment' post_id=post.id %}" method="post">
+<div class="newcomment" id="newcomment-{{post.id}}">
+    <form class="form-group form-newcomment" action="{% url 'addcomment' post_id=post.id %}" method="post" enctype="multipart/form-data">
         <h5>Write a Comment</h5>
         {% csrf_token %}
         <textarea class="form-control form-newcomment-text" name="comment_text" rows="2"></textarea>
-        <input class="btn btn-primary form-newcomment-submit" id="newcomment-submit-{{post.id}}" type="submit" value="Comment">
+        <div class="preview-commentphotos" id="preview-commentphotos-{{post.id}}"></div>
+        <div class="form-newcomment-btns">
+            <input class="btn btn-primary form-newcomment-submit" id="newcomment-submit-{{post.id}}" type="submit" value="Comment">
+            <div></div>
+            <label for="upload-img-{{post.id}}">
+                <div id="addphotos-btn-{{post.id}}" class="btn btn-outline-primary addphotos-btn">
+                    Add Photos
+                </div>
+            </label>
+            <input class="form-control form-newcomment-addphotos" 
+                type="file" 
+                class="upload-img"
+                id="upload-img-{{post.id}}"
+                name="addphotos"
+                accept="image/*">
+        </div>
         <input type="hidden" name="page_rendering" value="{{page_rendering}}">
+        <input type="hidden" name="page_number" value="{{page_number}}">
     </form>
 </div>

@@ -25,10 +25,8 @@ function likeCommentControl(comment) {
         })
     });
 
-    // const element = post.querySelector(".like-btn");
     // handle like post
     element.addEventListener('click', (event) => {
-        // const element_id = parseInt(element.id.substring(17));
         const type = "comment";
         const class_outline = `btn btn-sm btn-outline-primary comment-like-btn like-btn ${type}-hide-when-edit-${element_id}`;
         const class_non_outline = "btn btn-sm btn-primary comment-like-btn like-btn";
@@ -49,7 +47,7 @@ function likeCommentControl_unauth(comment) {
     const element_id = parseInt(element.id.substring(17));
     const type = "comment";
     const class_outline = `btn btn-sm btn-outline-primary comment-like-btn like-btn ${type}-hide-when-edit-${element_id}`;
-    const class_non_outline = `btn btn-sm btn-primary comment-like-btn like-btn ${type}-hide-when-edit-${element_id}`;
+    // const class_non_outline = `btn btn-sm btn-primary comment-like-btn like-btn ${type}-hide-when-edit-${element_id}`;
 
     fetch(`/${type}s/${element_id}`)
     .then(response => response.json())
@@ -58,11 +56,9 @@ function likeCommentControl_unauth(comment) {
         element.className = class_outline;
     });
 
-    // const element = post.querySelector(".like-btn");
     // handle like post
     element.addEventListener('click', (event) => {
-        // const element_id = parseInt(element.id.substring(17));
-        location.href = "login";
+        location.href = "../login";
     });
 }
 
@@ -71,18 +67,36 @@ function editCommentControl(comment) {
     comment.querySelectorAll(".edittext").forEach(block => {
         block.style.display = "none";
     })
-    const element = comment.querySelector('.edit-btn');
+
+    const element = comment.querySelector('.comment-edit-btn');
     if(element) {
         element.addEventListener('click', (event) => {
-            const element_id = parseInt(element.id.substring(17));
             const type = "comment";
-            element.style.display = "none";
-    
-            const hides = comment.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
-            hides.forEach(hide => {hide.style.display = "none"});
-    
+            const element_id = parseInt(element.id.substring(17));
+
+            // show editting tool (text area & add photo)
             const show = comment.querySelector(`.${type}-show-when-edit-${element_id}`);
             show.style.display = "block";
+
+            // clear buffer from uncommited edit (edit but did not submit)
+            const preview_img = comment.querySelector('.comment-img-wrap');
+            if (preview_img.querySelector('img')){
+                console.log('click');
+                preview_img.querySelector('img').click();
+            }
+
+            // show existing image as default
+            if (comment.querySelector('.comment-img')){
+                const comment_img = comment.querySelector('.comment-img');
+                const img = document.createElement('img');
+                img.src = `${comment_img.src}`;
+                preview_img.append(img);
+            }
+
+            // hide displaying elements
+            // element.style.display = "none";
+            const hides = comment.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
+            hides.forEach(hide => {hide.style.display = "none"});
         });
     }
 }

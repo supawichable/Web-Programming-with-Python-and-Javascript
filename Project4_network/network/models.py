@@ -85,7 +85,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             "followings": [user.username for user in self.followings.all()],
             "followings_num": self.followings.count(),
             "followers": [user.username for user in self.followers.all()],
-            "follwers_num": self.followers.count()
+            "followers_num": self.followers.count()
         }
 
 class Post(models.Model):
@@ -103,8 +103,8 @@ class Post(models.Model):
         }
 
 class ImageInPost(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to = 'post_images/')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_image")
+    image = models.ImageField(upload_to = 'post_img/')
 
 class Comment(models.Model):
     text = models.TextField(max_length=280, blank=True)
@@ -122,5 +122,5 @@ class Comment(models.Model):
         }
 
 class ImageInComment(models.Model):
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="image")
-    image = models.ImageField(upload_to = 'comment_images/')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="comment_image")
+    image = models.ImageField(upload_to = 'comment_img/')

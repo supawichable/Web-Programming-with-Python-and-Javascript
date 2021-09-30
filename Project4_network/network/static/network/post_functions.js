@@ -59,7 +59,7 @@ function likePostControl_unauth(post) {
 
     // handle like post
     element.addEventListener('click', (event) => {
-        location.href = "login";
+        location.href = "../login";
     });
 }
 
@@ -107,7 +107,7 @@ function likePostControl(post) {
 }
 
 
-function commentPostControl(post) {
+function saveState_commentPostControl(post) {
     // hide all comments
     var commentblock = post.querySelector(".commentblock");
     var comment_btn = post.querySelector(".comment-btn");
@@ -150,6 +150,51 @@ function commentPostControl(post) {
     });
 }
 
+
+function resetState_commentPostControl(post) {
+    // hide all comments
+    var commentblock = post.querySelector(".commentblock");
+    var comment_btn = post.querySelector(".comment-btn");
+    const post_id = parseInt(comment_btn.id.substring(12));
+
+    // if (!localStorage.getItem(`comment_btn_status_${post_id}`)) {
+    localStorage.setItem(`comment_btn_status_${post_id}`, 0);
+    comment_btn.classList.add('btn-outline-primary');
+    comment_btn.innerHTML = "▼ Comment";
+    // }
+    
+    var comment_btn_status = parseInt(localStorage.getItem(`comment_btn_status_${post_id}`));
+
+    if (comment_btn_status == 0) {
+        comment_btn.classList.add('btn-outline-primary');
+        comment_btn.innerHTML = "▼ Comment";
+        commentblock.style.display = "none";
+    } else {
+        comment_btn.click();
+        comment_btn.classList.add('btn-primary');
+        comment_btn.innerHTML = "▲ Comment";
+        commentblock.style.display = "block";
+    }
+
+    comment_btn.addEventListener('click', (event) => {
+        const post_id = parseInt(comment_btn.id.substring(12));
+        commentblock = document.querySelector(`#commentblock-${post_id}`);
+        
+        if (comment_btn.classList.contains('btn-outline-primary')) {
+            commentblock.style.display = "block";
+            comment_btn.className = `btn btn-sm btn-primary comment-btn`;
+            comment_btn.innerHTML = "▲ Comment";
+            localStorage.setItem(`comment_btn_status_${post_id}`, 1);
+        } else if(comment_btn.classList.contains('btn-primary')) {
+            commentblock.style.display = "none";
+            comment_btn.className = `btn btn-sm btn-outline-primary comment-btn`;
+            comment_btn.innerHTML = "▼ Comment";
+            localStorage.setItem(`comment_btn_status_${post_id}`, 0);
+        }
+    });
+}
+
+
 function editPostControl(post) {
     // hide edit part
     post.querySelectorAll(".edittext").forEach(block => {
@@ -158,9 +203,32 @@ function editPostControl(post) {
     const element = post.querySelector('.edit-btn');
     if(element) {
         element.addEventListener('click', (event) => {
-            const element_id = parseInt(element.id.substring(9));
             const type = "post";
-            element.style.display = "none";
+            const element_id = parseInt(element.id.substring(9));
+
+            const show  = post.querySelector(`.${type}-show-when-edit-${element_id}`);
+            show.style.display = "block";
+
+            // hide all images in preview
+            const preview_img = post.querySelector('.post-img-wrap-editpost');
+            preview_img.querySelectorAll('img').forEach((img) => {
+                img.className="unlisted"
+                img.style.display = "none";
+                // preview_img.remove(img);
+            })
+
+            // show all existing images in preview
+            const existing_img = post.querySelector('.post-img-wrap');
+            if (existing_img) {
+                existing_img.querySelectorAll('img').forEach((img) => {
+                    const new_img = document.createElement('img');
+                    new_img.src = img.src;
+                    new_img.className = "post-img-editpost";
+                    preview_img.append(new_img);
+                });
+            }
+
+            photoUpload_editPost(post);
 
             const hides = post.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
             hides.forEach(hide => {hide.style.display = "none"});
@@ -169,11 +237,15 @@ function editPostControl(post) {
             var editing_comment_btn = post.querySelector(`#editing-comment-btn-${element_id}`);
             editing_comment_btn.append(comment_btn);
 
-            const show  = post.querySelector(`.${type}-show-when-edit-${element_id}`);
-            show.style.display = "block";
+            // const preview_img = post.querySelector('.post-img-wrap-editpost');
+            // post.querySelectorAll('.recently-added').forEach((img) =>  {
+            //     img.click();
+            // });
+
         });
     }
 }
+
 
 function cancelEditPostControl(post) {
     const element = post.querySelector('.edit-cancel-btn');
@@ -189,11 +261,14 @@ function cancelEditPostControl(post) {
         comment_btn_span.append(comment_btn);
 
         const shows = post.querySelectorAll(`.${type}-hide-when-edit-${element_id}`);
-        shows.forEach(hide => {hide.style.display = "block"});
+        shows.forEach((hide) => {hide.style.display = "block"});
+
+        const grid = post.querySelector('.post-img-wrap');
+        grid.style.display = "grid";
     });
 }
 
-function removePostControl(post) {
+function index_removePostControl(post) {
     const element = post.querySelector('.remove-btn');
     if (element) {       
         element.addEventListener('click', (event) => { 
@@ -217,3 +292,20 @@ function removePostControl(post) {
     }
 }
 
+function profile_removePostControl(post){
+    const element = post.querySelector('.remove-btn');
+    if (element) {       
+        element.addEventListener('click', (event) => { 
+            post.remove();
+            const element_id = parseInt(element.id.substring(11));
+            const csrftoken = getCookie('csrftoken');
+            fetch(`/post_interact/${element_id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    remove: true
+                }),
+                headers: {"X-CSRFToken": csrftoken}
+            }); 
+        });
+    }
+}

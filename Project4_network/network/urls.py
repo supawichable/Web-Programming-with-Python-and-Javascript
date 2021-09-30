@@ -17,6 +17,9 @@ urlpatterns = [
     path("editpost/<int:post_id>", views.editpost, name="editpost"),
     path("editcomment/<int:comment_id>", views.editcomment, name="editcomment"),
     path("editprofile/<str:username>", views.editprofile, name="editprofile"),
+    path("index_paginator/", views.index_paginator, name="index_paginator"),
+    path("following_paginator/", views.following_paginator, name="following_paginator"),
+    path("profile_paginator/", views.profile_paginator, name="profile_paginator"),
 
     # API Routes
     # path("posts/<str:post_list>", views.views.all_post, name="all_post"),
@@ -30,4 +33,5 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.PROFILE_IMG_URL, document_root=settings.PROFILE_IMG_ROOT)
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.PROFILEIMG_ROOT)
+urlpatterns += static(settings.COMMENT_IMG_URL, document_root=settings.COMMENT_IMG_ROOT)
+urlpatterns += static(settings.POST_IMG_URL, document_root=settings.POST_IMG_ROOT)
