@@ -22,7 +22,6 @@ urlpatterns = [
     path("profile_paginator/", views.profile_paginator, name="profile_paginator"),
 
     # API Routes
-    # path("posts/<str:post_list>", views.views.all_post, name="all_post"),
     path("user/", views.user, name="user"),
     path("user/<int:user_id>", views.user, name="other_user"),
     path("user_interact/<int:user_id>", views.user_interact, name="user_interact"),

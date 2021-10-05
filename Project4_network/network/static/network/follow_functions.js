@@ -1,7 +1,9 @@
 function followControl(userinfo) {
+    /*
+    handle follow-unfollow buttons' switching and initial rendering
+    */
     const user_id = parseInt(userinfo.id.substring(5));
     const follow_btn = userinfo.querySelector('.follow-btn');
-    // update_followers(user_id);
 
     fetch(`/user/${user_id}`)
     .then(response => response.json())
@@ -36,6 +38,9 @@ function followControl(userinfo) {
 }
 
 function follow(user_id) {
+    /*
+    send follow action's data to backend
+    */
     const csrftoken = getCookie('csrftoken');
     fetch(`/user_interact/${user_id}`, {
         method: 'PUT',
@@ -47,17 +52,12 @@ function follow(user_id) {
 
     var follower_self = document.querySelector('.dropdown-follower-self');
     follower_self.style.display = "block";
-    // var followers = document.getElementById('#dropdown-content-follower');
-    // const grid_col_1 = document.createElement('div');
-    // grid_col_1.className = "grid-col-1";
-    // const profile_img = document.createElement('img');
-    // profile_img.src = ""
-    // document.cre
-    // const grid_col_2 = document.createElement('div');
-    // grid_col_2.className = ""
 }
 
 function unfollow(user_id) {
+    /*
+    send unfollow action's data to backend
+    */
     const csrftoken = getCookie('csrftoken');
     fetch(`/user_interact/${user_id}`, {
         method: 'PUT',
@@ -72,6 +72,9 @@ function unfollow(user_id) {
 }
 
 function update_followers(userinfo) {
+    /*
+    update number of followers in profile page when the user follows/unfollows someone
+    */
     const user_id = parseInt(userinfo.id.substring(5));
     fetch(`/user/${user_id}`)
     .then(response => response.json())
@@ -86,6 +89,9 @@ function update_followers(userinfo) {
 }
 
 function dropdownControl(userinfo) {
+    /*
+    control followers/following's dropdowns
+    */
     userinfo.querySelectorAll('.dropdown-content').forEach((dropdown) => {
         dropdown.style.display = "none";
     });
@@ -98,10 +104,10 @@ function dropdownControl(userinfo) {
         }
     });
 
+    // hide when click outside
     userinfo.querySelectorAll('.dropdown-btn').forEach((btn) => {
         btn.addEventListener('click', (event) => {
             const id = btn.id.substring(13);
-            console.log(id);
             const dropdown = userinfo.querySelector(`#dropdown-content-${id}`);
             if (dropdown.style.display === "none") {
                 dropdown.style.display = "block";

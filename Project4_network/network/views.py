@@ -20,17 +20,20 @@ def index(request):
 
 @login_required
 def addpost(request):
+    """
+    backend for addding a new post
+    """
     page_rendering = "index" #default
     if request.method == "POST":
         page_rendering = request.POST["page_rendering"]
         upload_imgs = request.FILES.getlist("addphotos-newpost", None)
-        # print(upload_imgs)
 
+        # handle new post's text
         if 'post_text' in request.POST:
             post_text = request.POST["post_text"]
             post = Post(text=post_text, owner=request.user)
             post.save()
-        
+        # handle uploaded images (if there are)
         if upload_imgs:
             for upload_img in upload_imgs:
                 post_img = ImageInPost(post=post, image=upload_img)
@@ -39,111 +42,98 @@ def addpost(request):
 
 @login_required
 def addcomment(request, post_id):
+    """
+    backend for addding a new comment
+    """
     page_rendering = "index" #default
-    # page_number = 1 #default
     if request.method == "POST":
         page_rendering = request.POST["page_rendering"]
         page_number = request.POST["page_number"]
         upload_img = request.FILES.get("addphotos", None)
 
+        # handle new comment's text
         if 'comment_text' in request.POST:
             comment_text = request.POST["comment_text"]
             comment_post = Post.objects.get(pk=post_id)
             comment = Comment(text=comment_text, owner=request.user, post=comment_post)
             comment.save()
-        
+        # handle uploaded image (if there is)
         if upload_img:
-            # print("Got here")
-            # fs = FileSystemStorage(location=settings.COMMENT_IMG_ROOT, base_url='/comment_img/')
-            # file = fs.save(upload_img.name, upload_img)
             comment_img = ImageInComment(comment=comment, image=upload_img)
             comment_img.save()
-            # print(comment_img.comment)
-            # print(comment_img)
-            # print(ImageInComment.objects.filter(comment=comment))
-            # print(comment.comment_image.all())
-        # print(comment.comment_image)
 
         return paginator(request, page_rendering, username=request.user.username, page_number=page_number, action="addcomment")
     return paginator(request, page_rendering, username=request.user.username)
 
 @login_required
 def editpost(request, post_id):
+    """
+    backend for editing a post
+    """
     if request.method == "POST":
-        # sha1 = hashlib.sha1()
-        # hashstring = hashlib.sha1(str(request.POST.get('csrf_token')))
-        # if request.session.get('sessionform') != hashstring:
-            page_rendering = request.POST["page_rendering"]
-            page_number = request.POST["page_number"]
-            status = request.POST.get("status", None)
-            if status:
-                deleted = json.loads(status)["deleted"]
-            else:
-                deleted = []
-                # current_num = json.loads(status)["current_num"]
-            upload_imgs = request.FILES.getlist("addphotos-editpost", None)
-            post = Post.objects.get(pk=post_id)
-            # current_num = int(request.POST["current_num"])
-            # print("CURRENT_NUM: ", current_num)
-            # print("BASE DIR: ", settings.BASE_DIR)
-            # print("DELETED backend: ", deleted)
-            print("UPLOAD: ", len(upload_imgs))
-            print("DELETE: ", deleted)
-            print("EXISTING: ", len(ImageInPost.objects.filter(post = post)))
-            if 'edit_post_text' in request.POST:
-                edittext = request.POST['edit_post_text']
-                Post.objects.filter(pk=post_id).update(text=edittext)
-            if len(upload_imgs) - len(deleted) + len(ImageInPost.objects.filter(post = post)) > 4:
-            # if current_num > 4:
-                print("GOT HERE!")
-                return paginator(request, page_rendering, username=request.user.username, page_number=page_number)
-            if upload_imgs:
-                for upload_img in upload_imgs:
-                    post_img = ImageInPost.objects.create(post=post, image=upload_img)
-                    post_img.save()
-            if deleted:
-                for deleted_img in deleted:
-                    for image in ImageInPost.objects.filter(post=post).all():
-                        # print("URL: ", image.image.url)
-                        # print("DELETED: ", deleted_img)
-                        if image.image.url in deleted_img:
-                            # print("DELETED!!")
-                            image.delete()
-    return paginator(request, page_rendering, username=request.user.username, page_number=page_number)
+        # retrive status (existing images, deleted images, added images) from front-end
+        status = request.POST.get("status", None)
+        # get deleted images' list
+        if status:
+            deleted = json.loads(status)["deleted"]
+        else:
+            deleted = []
+        upload_imgs = request.FILES.getlist("addphotos-editpost", None)
+        post = Post.objects.get(pk=post_id)
+
+        # handle edited post's text
+        if 'edit_post_text' in request.POST:
+            edittext = request.POST['edit_post_text']
+            Post.objects.filter(pk=post_id).update(text=edittext)
+        # allows up to 4 images in a post
+        if len(upload_imgs) - len(deleted) + len(ImageInPost.objects.filter(post = post)) > 4:
+            return JsonResponse({'not updated': "Number of photos exceeds limit of 4."}, status=204)
+        # handle edited post's images
+        if upload_imgs:
+            for upload_img in upload_imgs:
+                post_img = ImageInPost.objects.create(post=post, image=upload_img)
+                post_img.save()
+        # if previously existed images get deleted, handle the delete
+        if deleted:
+            for deleted_img in deleted:
+                for image in ImageInPost.objects.filter(post=post).all():
+                    if image.image.url in deleted_img:
+                        image.delete()
+    return JsonResponse({'updated': "Post updated."}, status=204)
 
 @login_required
 def editcomment(request, comment_id):
+    """
+    backend for editing a comment
+    """
     if request.method == "POST":
         page_rendering = request.POST["page_rendering"]
         page_number = request.POST["page_number"]
         status = request.POST['status']
         upload_img = request.FILES.get("addphotos", None)
-        # upload_img = request.FILES["addphotos_editcomment"]
-        # print("UPLOAD: ", upload_img)
         comment = Comment.objects.get(pk=comment_id)
-        # comment_image = comment.comment_image.all()[0]
+        # handle edited comment's text
         if 'edit_comment_text' in request.POST:
             edittext = request.POST['edit_comment_text']
-            # print("Edittext: ", edittext)
             Comment.objects.filter(pk=comment_id).update(text=edittext)
-            # comment.comment_text = edittext
-            # comment_filtered.update(text=edittext)
-            # comment_filtered.save()
-            # comment.update(text=edittext)
+        # handle edited comment's image
         if upload_img:
-            # print("COMMENT IMG: ", comment.comment_image)
             if comment.comment_image:
                 comment_image = comment.comment_image.all()
                 comment_image.delete()
             comment_image = ImageInComment(comment=comment, image=upload_img)
-            print("Comment Image: ", comment_image)
             comment_image.save()
+        # if previously existed image gets deleted, handle the delete
         elif status == "deleted":
             comment_image = comment.comment_image.all()
             comment_image.delete()
-    return paginator(request, page_rendering, username=request.user.username, page_number=page_number, action="editcomment")
+    return JsonResponse({'updated': "Comment updated."}, status=204)
+
 
 def index_paginator(request):
+    """
+    render index page with paginator
+    """
     posts = Post.objects.all()
     paginator = Paginator(posts.order_by('-timestamp'), 10)
     page_number = request.GET.get('page_number')
@@ -152,6 +142,7 @@ def index_paginator(request):
         page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # if there's no post yet, render the page with message
     if list(posts) == []:
         return render(request, "network/index.html", {
             "page_obj" : page_obj,
@@ -166,6 +157,9 @@ def index_paginator(request):
     })
 
 def following_paginator(request):
+    """
+    render following page with paginator
+    """
     posts = Post.objects.filter(owner__in = request.user.followings.all()).order_by('-timestamp')
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page_number')
@@ -173,6 +167,8 @@ def following_paginator(request):
     if not page_number:
         page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+    # if there's no post yet, render the page with message
     if list(posts) == []:
         return render(request, "network/following.html", {
             "page_obj" : page_obj,
@@ -185,9 +181,11 @@ def following_paginator(request):
     })
 
 def profile_paginator(request):
+    """
+    render profile page with paginator
+    """
     username = request.GET.get('username')
     user_profile = CustomUser.objects.get(username=username)
-    # paginator = Paginator(Post.objects.all().order_by('-timestamp'), 10)
     posts = user_profile.posted.all().order_by('-timestamp')
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page_number')
@@ -195,6 +193,7 @@ def profile_paginator(request):
     if not page_number:
         page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    # if there's no post yet, render the page with message
     if list(posts.all()) == []:
         return render(request, "network/profile.html", {
         "profile": user_profile,
@@ -211,33 +210,29 @@ def profile_paginator(request):
     })
 
 def paginator(request, page_rendering, username=None, page_number=None, action=None):
+    """
+    paginator functions handling (redirect to the designated function)
+    """
     if page_rendering == "index":
         redirect_url = reverse('index_paginator')
         parameters = urlencode({'page_number': page_number, 'action': action})
         url = f'{redirect_url}?{parameters}'
         return redirect(url)
-        # return redirect(index_paginator, page_number=page_number, action=action)
-        # return index_paginator(request, page_number, action)
     elif page_rendering == "following":
         redirect_url = reverse('following_paginator')
         parameters = urlencode({'page_number': page_number, 'action': action})
         url = f'{redirect_url}?{parameters}'
         return redirect(url)
-        # return following_paginator(request, page_number, action)
     elif page_rendering == "profile":
         redirect_url = reverse('profile_paginator')
         parameters = urlencode({'page_number': page_number, 'username':username, 'action': action})
         url = f'{redirect_url}?{parameters}'
         return redirect(url)
-        # print(username)
-        # return redirect(profile_paginator, page_number=page_number, action=action)
-        # return profile_paginator(request, username, page_number, action)
 
 def login_view(request):
     next = ""
     if request.GET:
         next = request.GET['next']
-    print("next 123: ", next)
 
     if request.POST:
 
@@ -267,6 +262,9 @@ def logout_view(request):
 
 
 def register(request):
+    """
+    backend for registering a new user account
+    """
     if request.method == "POST":
         display_name = request.POST["display_name"]
         username = request.POST["username"]
@@ -304,6 +302,9 @@ def register(request):
 
 @login_required
 def following(request):
+    """
+    following page's view
+    """
     page_rendering = "following"
     if request.method == "POST":
         post_text = request.POST["post_text"]
@@ -312,11 +313,17 @@ def following(request):
     return paginator(request, page_rendering)
 
 def profile(request, username):
+    """
+    profile page's view
+    """
     page_rendering = "profile"
     return paginator(request, page_rendering, username)
 
 @login_required
 def editprofile(request, username):
+    """
+    backend for editing a user's profile
+    """
     user_profile = CustomUser.objects.get(username=username)
     if not user_profile.date_of_birth:
         date_of_birth = None
@@ -332,39 +339,27 @@ def editprofile(request, username):
         status = request.POST["status"]
         profile_img = request.FILES.get("profile_img", None) # if file not uploaded, set default to None
 
-        print(date_of_birth)
         if not date_of_birth:
             date_of_birth = None
-        # else:
-        #     date_of_birth = date_of_birth.strftime("%Y-%m-%d")
 
         try:
-            # print("PROFILE IMG: ", profile_img)
+            # handle profile image's changes
             user = CustomUser.objects.filter(username=username)
+            # if a new image is uploaded, change the image
             if profile_img:
-                # print("profile exists")
-                # print(profile_img.value)
-                # print("Profile changed")
                 fs = FileSystemStorage(location=settings.PROFILE_IMG_ROOT, base_url='/profile_img/')
-                # fs = FileSystemStorage(location=settings.PROFILE_IMG_ROOT)
                 file = fs.save(profile_img.name, profile_img)
-                # fileurl = fs.url(file)
-                # print("URL: ", fileurl)
                 user.update(display_name=display_name, username=new_username,email=email, date_of_birth=date_of_birth, about=about, profile_img="/profile_img/{}".format(profile_img))
-                # user.update(display_name=display_name, username=new_username,email=email, date_of_birth=date_of_birth, about=about, profile_img="/profile_img/default1.jpg")
             elif status == "unchanged":
-                # print(user_profile.profile_img)
-                # print("Profile unchanged")
                 user.update(display_name=display_name, username=new_username,email=email, date_of_birth=date_of_birth, about=about)
+            # set profile image to default if user deleted their profile image
             elif status == "deleted": 
-                # print("Profile deleted")
                 user.update(display_name=display_name, username=new_username,email=email, date_of_birth=date_of_birth, about=about, profile_img=settings.DEFAULT_PROFILE)
         except IntegrityError:
             return render(request, "network/editprofile.html", {
                 "message": "⚠️ Username already taken.",
                 "profile": user_profile,
                 "date_of_birth": user_profile.date_of_birth
-                # "date_of_birth": user_profile.date_of_birth.strftime("%Y-%m-%d")
             })
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
@@ -373,7 +368,6 @@ def editprofile(request, username):
                 "message": "⚠️ Passwords must match.",
                 "profile": user_profile,
                 "date_of_birth": user_profile.date_of_birth
-                # "date_of_birth": user_profile.date_of_birth.strftime("%Y-%m-%d")
             })
         return HttpResponseRedirect(reverse('profile', args=[new_username]))
     return render(request, "network/editprofile.html", {
@@ -383,7 +377,9 @@ def editprofile(request, username):
 
 
 def posts(request, post_id):
-    # Query for requested post
+    """
+    API query for requested post
+    """ 
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
@@ -398,7 +394,9 @@ def posts(request, post_id):
         }, status=400)
 
 def comments(request, comment_id):
-    # Query for requested comment
+    """
+    API query for requested comment
+    """
     try:
         comment = Comment.objects.get(pk=comment_id)
     except Comment.DoesNotExist:
@@ -414,6 +412,9 @@ def comments(request, comment_id):
 
 @login_required
 def user(request, user_id=""):
+    """
+    API query for requested comment
+    """
     if user_id == "":
         fetched_user = request.user
     else:
@@ -429,8 +430,9 @@ def user(request, user_id=""):
 
 @login_required
 def user_interact(request, user_id):
-
-    # Query for requested user
+    """
+    API calls for updating users' followers
+    """
     try:
         fetched_user = CustomUser.objects.get(pk=user_id)
     except CustomUser.DoesNotExist:
@@ -452,8 +454,9 @@ def user_interact(request, user_id):
 
 @login_required
 def post_interact(request, post_id):
-
-    # Query for requested post
+    """
+    API calls for updating posts
+    """
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
@@ -473,8 +476,7 @@ def post_interact(request, post_id):
             comment.save()
         if data.get("edittext"):
             edittext = data.get("edittext")
-            post = Post.objects.filter(pk=post_id).update(text=edittext)
-            post.save()
+            Post.objects.filter(pk=post_id).update(text=edittext)
         if data.get("remove") == True:
             post.delete()
         return HttpResponse(status=204)
@@ -486,7 +488,9 @@ def post_interact(request, post_id):
 
 @login_required
 def comment_interact(request, comment_id):
-    # Query for requested comment
+    """
+    API calls for updating comments
+    """
     try:
         comment = Comment.objects.get(pk=comment_id)
     except:

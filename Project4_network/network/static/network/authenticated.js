@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
         editPostControl(post);
         cancelEditPostControl(post);
         index_removePostControl(post);
-        // photoUpload_editPost(post);
+        submitEditPostControl(post);
+        photoUpload_editPost(post);
     });
 
     document.querySelectorAll(".newcomment").forEach((newcomment) => {
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         removeCommentControl(comment);
         photoUpload_editComment(comment);
         removePhoto_editComment(comment);
+        submitEditCommentControl(comment);
     });
 
 });

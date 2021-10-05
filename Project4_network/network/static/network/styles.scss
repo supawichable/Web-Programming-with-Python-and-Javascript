@@ -1,6 +1,3 @@
-// @import "node_modules/bootstrap/scss/functions";
-// @import "node_modules/bootstrap/scss/variables";
-
 $primary:teal;
 $danger:darkred;
 
@@ -460,9 +457,6 @@ button,
 
 .preview-commentphotos {
     display: grid;
-    // margin: 15px;
-    // grid-template-columns: repeat(4, 1fr);
-    // grid-template-rows: repeat(auto-fill, 1fr);
 
     img {
         max-width: 100%;
@@ -473,14 +467,6 @@ button,
         justify-self: center;
         align-self: center;
     }
-
-    // img:hover{
-    //     max-width: 120 * 1.2px;
-    //     max-height: 90 * 1.2px;
-    //     object-fit:cover;
-    //     margin: 10px;
-    //     box-shadow: 2px 2px 4px gray;
-    // }
 }
 
 .profile-img-wrap {
@@ -560,7 +546,6 @@ button,
     position: absolute;
     width:auto;
     min-width:300px;
-    // min-width: 150px;
     box-shadow: 2px 2px 4px gray;
     background-color: white;
     z-index: 1;
@@ -575,7 +560,6 @@ button,
         background-color: white;
         padding: 12px 16px;
         text-decoration: none;
-        // display:block;
 
         .grid-col-2{
             display:grid;

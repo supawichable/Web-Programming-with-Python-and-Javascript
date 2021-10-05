@@ -18,14 +18,9 @@
                     {% csrf_token %}
                     <textarea class="comment form-control form-editcomment-text" name="edit_comment_text" rows="2">{{comment.text}}</textarea>
                     <div class="comment-img-wrap" id="comment-img-wrap-{{comment.id}}">
-                        <!-- {% if comment.comment_image.all %} -->
-                            <!-- {% with image=comment.comment_image.all.0 %} -->
-                                <!-- <img class="comment-img" id="comment-img-{{comment.id}}" src="{{ image.image.url }}"> -->
-                            <!-- {% endwith %} -->
-                        <!-- {% endif %} -->
                     </div>
                     <div class="form-editcomment-btns">
-                        <input class="comment btn btn-sm btn-primary edit-comment-btn comment-edit-submit-btn" type="submit" value="Submit">
+                        <input class="comment btn btn-sm btn-primary edit-comment-btn comment-edit-submit-btn" id="comment-edit-submit-btn-{{comment.id}}" type="submit" value="Submit">
                         <button class="comment btn btn-sm btn-outline-primary edit-cancel-btn comment-edit-cancel-btn" id="comment-edit-cancel-btn-{{comment.id}}" type="button">Cancel</button>
                         <div></div>
                         <label for="upload-img-editcomment-{{comment.id}}">
@@ -54,13 +49,15 @@
         {{ comment.text }}
     </div>
 
-    {% if comment.comment_image.all %}
-        {% with image=comment.comment_image.all.0 %}
-            <a href={{image.image.url}}>
-                <img class="comment-img comment-hide-when-edit-{{comment.id}}" src="{{ image.image.url }}">
-            </a>
-        {% endwith %}
-    {% endif %}
+    <div class="text commenttext-img-wrap comment-hide-when-edit-{{comment.id}}" id="comment-img-{{comment.id}}">
+        {% if comment.comment_image.all %}
+            {% with image=comment.comment_image.all.0 %}
+                <a href={{image.image.url}}>
+                    <img class="comment-img comment-hide-when-edit-{{comment.id}}" src="{{ image.image.url }}">
+                </a>
+            {% endwith %}
+        {% endif %}
+    </div>
 
     <div class="edittext" id="comment-edittext-{{comment.id}}">
     </div>
