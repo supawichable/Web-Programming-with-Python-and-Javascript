@@ -1,4 +1,4 @@
-# CS50 - Project 0: Search
+Project 0: Search
 
 ## Table of contents
 - [Introduction](#introduction)
